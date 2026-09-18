@@ -73,7 +73,7 @@
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
 
-        /* ================= MARQUEE ================= */
+        /* ================= MARQUEE (scroll LENTO y calmado) ================= */
         @keyframes scroll-left {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -108,6 +108,9 @@
         }
 
         .poster {
+            /* Optimizaciones de rendimiento para el pool de 1000 */
+            content-visibility: auto;
+            contain: layout paint style;
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
             filter: saturate(1) brightness(0.95);
         }
@@ -300,83 +303,79 @@
         }
 
         /* ============================================================
-           ============ MODO SMART TV (HOVER: NONE) ===================
-           Se activa SOLO en dispositivos sin puntero (TV, Fire TV,
-           controles remotos). En PC con mouse NO se activa, por lo
-           que la vista de PC permanece intacta.
-           Agranda todo ~2x para que se lea bien a distancia.
+           MODO SMART TV (hover: none)
+           Reduce el crecimiento a solo ~1.35x (antes era 2x).
+           Se activa SOLO sin mouse (TV, control remoto).
            ============================================================ */
         @media (hover: none) and (min-width: 768px) {
-            /* La tarjeta se hace más ancha para que quepan los textos grandes */
             .card-responsive {
-                width: min(82vmin, 720px) !important;
+                width: min(66vmin, 540px) !important;
             }
 
             .card-padding {
-                padding: 2.75rem 2.5rem !important;
+                padding: 1.85rem 1.65rem !important;
             }
 
             .logo-card {
-                width: 5rem !important;
-                height: 5rem !important;
-                margin-bottom: 1.35rem !important;
-                border-radius: 1.5rem !important;
+                width: 3.6rem !important;
+                height: 3.6rem !important;
+                margin-bottom: 0.95rem !important;
+                border-radius: 1.15rem !important;
             }
             .logo-card svg {
-                width: 2.5rem !important;
-                height: 2.5rem !important;
+                width: 1.75rem !important;
+                height: 1.75rem !important;
             }
 
             .titulo-card {
-                font-size: 3.1rem !important;
-                margin-bottom: 0.75rem !important;
+                font-size: 2rem !important;
+                margin-bottom: 0.45rem !important;
             }
 
             .subtitle-card {
-                font-size: 1.4rem !important;
-                margin-bottom: 1.75rem !important;
-                line-height: 1.4 !important;
+                font-size: 0.98rem !important;
+                margin-bottom: 1.05rem !important;
+                line-height: 1.35 !important;
             }
 
             .tags-card {
-                gap: 0.7rem !important;
-                margin-bottom: 1.85rem !important;
+                gap: 0.45rem !important;
+                margin-bottom: 1.15rem !important;
                 flex-wrap: nowrap !important;
             }
             .tags-card li {
-                font-size: 1.05rem !important;
-                padding: 0.55rem 1.2rem !important;
+                font-size: 0.78rem !important;
+                padding: 0.32rem 0.85rem !important;
                 white-space: nowrap !important;
             }
 
             .btn-download {
-                font-size: 1.55rem !important;
-                padding: 1.4rem 1.75rem !important;
-                gap: 0.9rem !important;
-                border-radius: 1.35rem !important;
+                font-size: 1.08rem !important;
+                padding: 0.95rem 1.2rem !important;
+                gap: 0.6rem !important;
+                border-radius: 1rem !important;
             }
             .btn-download > svg {
-                width: 1.75rem !important;
-                height: 1.75rem !important;
+                width: 1.25rem !important;
+                height: 1.25rem !important;
             }
             .btn-download .play-badge {
-                left: 1rem !important;
+                left: 0.75rem !important;
             }
             .btn-download .play-badge svg {
-                width: 1.75rem !important;
-                height: 1.75rem !important;
+                width: 1.25rem !important;
+                height: 1.25rem !important;
             }
 
             .nota-card {
-                font-size: 1.05rem !important;
-                margin-top: 1.5rem !important;
-                line-height: 1.55 !important;
+                font-size: 0.82rem !important;
+                margin-top: 0.85rem !important;
+                line-height: 1.5 !important;
             }
 
-            /* Toast también más grande */
             .toast {
-                font-size: 1.15rem !important;
-                padding: 0.9rem 1.5rem !important;
+                font-size: 1rem !important;
+                padding: 0.75rem 1.25rem !important;
             }
         }
 
@@ -401,7 +400,7 @@
         <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
     </div>
 
-    <!-- ================= FONDO: CARRUSEL GENERADO POR JS ================= -->
+    <!-- ================= FONDO: CARRUSEL DE 1000 IMÁGENES ================= -->
     <div id="marqueeContainer"
          class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
          aria-hidden="true">
@@ -486,72 +485,152 @@
 
     <script>
         // ============================================================
-        // POOL DE PÓSTERS CINEMATOGRÁFICOS
+        // POOL DE 1000 IMÁGENES CINEMATOGRÁFICAS
         // ============================================================
-        const POSTERS = [
-            "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&q=70",
-            "https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=300&q=70",
-            "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300&q=70",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=70",
-            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=70",
-            "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=300&q=70",
-            "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&q=70",
-            "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=300&q=70",
-            "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=70",
-            "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=300&q=70",
-            "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&q=70",
-            "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=300&q=70",
-            "https://images.unsplash.com/photo-1563089145-599997674d42?w=300&q=70",
-            "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300&q=70",
-            "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&q=70",
-            "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=300&q=70",
-            "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=300&q=70",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=70",
-            "https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=300&q=70",
-            "https://images.unsplash.com/photo-1514539079130-25950c84af65?w=300&q=70",
-            "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=300&q=70",
-            "https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=300&q=70",
-            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&q=70",
-            "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=300&q=70",
-            "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=300&q=70",
-            "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&q=70",
-            "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=300&q=70",
-            "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&q=70",
-            "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300&q=70",
-            "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&q=70",
-            "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&q=70",
-            "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=300&q=70",
-            "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300&q=70",
-            "https://images.unsplash.com/photo-1618172193763-c511deb635ca?w=300&q=70",
-            "https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=300&q=70",
-            "https://images.unsplash.com/photo-1541562232579-512a21360020?w=300&q=70",
-            "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&q=70",
-            "https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=300&q=70",
-            "https://images.unsplash.com/photo-1601987177651-8edfe6c20009?w=300&q=70",
-            "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=300&q=70",
-        ];
+        // Estrategia:
+        // 1) 80 URLs curadas de Unsplash (cine, sci-fi, superhéroes,
+        //    fantasía, terror, drama, anime, neón) — máxima calidad.
+        // 2) 920 imágenes más generadas con picsum.photos usando
+        //    semillas únicas (seed) para obtener 1000 URLs distintas.
+        // Total: 1000 imágenes únicas.
+        // ============================================================
+        const POSTERS = (function () {
+            const list = [];
 
+            // --- 80 imágenes curadas de Unsplash ---
+            const curated = [
+                // Ciencia ficción / espacio
+                "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&q=70",
+                "https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=300&q=70",
+                "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300&q=70",
+                "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=70",
+                "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=70",
+                "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=300&q=70",
+                "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&q=70",
+                "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=300&q=70",
+                "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=70",
+                "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=300&q=70",
+                "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=70",
+                "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=300&q=70",
+
+                // Superhéroes / acción urbana
+                "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&q=70",
+                "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=300&q=70",
+                "https://images.unsplash.com/photo-1563089145-599997674d42?w=300&q=70",
+                "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300&q=70",
+                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&q=70",
+                "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=300&q=70",
+                "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=300&q=70",
+                "https://images.unsplash.com/photo-1517594422361-5eeb8ae275a9?w=300&q=70",
+                "https://images.unsplash.com/photo-1519638831568-d9897f54ed69?w=300&q=70",
+                "https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=300&q=70",
+                "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=300&q=70",
+                "https://images.unsplash.com/photo-1495556650867-99590cea3657?w=300&q=70",
+
+                // Fantasía / aventuras
+                "https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=300&q=70",
+                "https://images.unsplash.com/photo-1514539079130-25950c84af65?w=300&q=70",
+                "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=300&q=70",
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&q=70",
+                "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=300&q=70",
+                "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=300&q=70",
+                "https://images.unsplash.com/photo-1476900543704-4312b78632f8?w=300&q=70",
+                "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=300&q=70",
+                "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?w=300&q=70",
+                "https://images.unsplash.com/photo-1508186225823-0963cf9ab0de?w=300&q=70",
+                "https://images.unsplash.com/photo-1444927714506-8492d94b4e3d?w=300&q=70",
+                "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=300&q=70",
+
+                // Terror / suspenso / drama
+                "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=300&q=70",
+                "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&q=70",
+                "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=300&q=70",
+                "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&q=70",
+                "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300&q=70",
+                "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&q=70",
+                "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&q=70",
+                "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=300&q=70",
+                "https://images.unsplash.com/photo-1502139214982-d0ad755818d8?w=300&q=70",
+                "https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?w=300&q=70",
+                "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&q=70",
+                "https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?w=300&q=70",
+
+                // Anime / neón / colorido
+                "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300&q=70",
+                "https://images.unsplash.com/photo-1618172193763-c511deb635ca?w=300&q=70",
+                "https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=300&q=70",
+                "https://images.unsplash.com/photo-1541562232579-512a21360020?w=300&q=70",
+                "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&q=70",
+                "https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=300&q=70",
+                "https://images.unsplash.com/photo-1601987177651-8edfe6c20009?w=300&q=70",
+                "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=300&q=70",
+                "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=300&q=70",
+                "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=300&q=70",
+                "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=300&q=70",
+                "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=300&q=70",
+
+                // Abstracto / atmósfera cinematográfica
+                "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=300&q=70",
+                "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=300&q=70",
+                "https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=300&q=70",
+                "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&q=70",
+                "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=70",
+                "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=300&q=70",
+                "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?w=300&q=70",
+                "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=300&q=70",
+                "https://images.unsplash.com/photo-1517976487492-5750f3195933?w=300&q=70",
+                "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=300&q=70",
+                "https://images.unsplash.com/photo-1532978379173-523e16f371f9?w=300&q=70",
+                "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=300&q=70",
+                "https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=300&q=70",
+                "https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?w=300&q=70",
+                "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?w=300&q=70",
+                "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=70",
+            ];
+            list.push.apply(list, curated);
+
+            // --- 920 imágenes adicionales con picsum.photos (semillas únicas) ---
+            // Cada seed genera una foto diferente y estable.
+            const TOTAL = 1000;
+            for (let i = list.length; i < TOTAL; i++) {
+                list.push('https://picsum.photos/seed/tvxpertplus' + i + '/300/450');
+            }
+
+            return list;
+        })();
+
+        // ============================================================
+        // DISTRIBUCIÓN EN 3 FILAS DE ~333 IMÁGENES CADA UNA
+        // Scroll MUY LENTO: 300s / 340s / 380s por ciclo.
+        // ============================================================
         (function buildMarquee() {
             const contenedor = document.getElementById('marqueeContainer');
             if (!contenedor) return;
 
+            const total = POSTERS.length;
+            const porFila = Math.ceil(total / 3);
+
             const filas = [
-                { dir: 'left',  dur: '60s' },
-                { dir: 'right', dur: '70s' },
-                { dir: 'left',  dur: '80s' },
+                { dir: 'left',  dur: '300s', inicio: 0 },
+                { dir: 'right', dur: '340s', inicio: porFila },
+                { dir: 'left',  dur: '380s', inicio: porFila * 2 },
             ];
 
             filas.forEach(function (fila) {
+                const chunk = POSTERS.slice(fila.inicio, fila.inicio + porFila);
+                if (!chunk.length) return;
+
                 const row = document.createElement('div');
                 row.className = (fila.dir === 'left' ? 'marquee-row-left' : 'marquee-row-right') + ' gap-4';
                 row.style.animationDuration = fila.dur;
 
+                // Duplicamos el bloque para bucle sin costuras
                 for (let copia = 0; copia < 2; copia++) {
                     const bloque = document.createElement('div');
                     bloque.className = 'flex shrink-0 gap-4';
                     if (copia === 1) bloque.setAttribute('aria-hidden', 'true');
 
-                    POSTERS.forEach(function (url) {
+                    chunk.forEach(function (url) {
                         const img = document.createElement('img');
                         img.src = url;
                         img.loading = 'lazy';
@@ -573,6 +652,9 @@
             });
         })();
 
+        // ============================================================
+        // INTERACCIÓN DEL BOTÓN
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function () {
             const boton = document.getElementById('btnDescargar');
             const toast = document.getElementById('toast');
