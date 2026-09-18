@@ -37,6 +37,16 @@
 
         html { scroll-behavior: smooth; }
 
+        /* ================= CURSOR PLAY ================= */
+        body,
+        a,
+        button,
+        [role="button"],
+        #btnDescargar {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='14' fill='white'/%3E%3Ccircle cx='16' cy='16' r='12' fill='%232563eb'/%3E%3Cpath d='M13 10 L24 16 L13 22 Z' fill='white'/%3E%3C/svg%3E") 16 16, pointer;
+        }
+        input, textarea { cursor: text; }
+
         /* ================= FONDO AURORA ================= */
         .blob {
             position: absolute;
@@ -61,7 +71,7 @@
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
 
-        /* ================= MARQUEE DE PÓSTERS ================= */
+        /* ================= MARQUEE ================= */
         @keyframes scroll-left {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -106,7 +116,6 @@
             z-index: 5;
         }
 
-        /* ================= OVERLAY LIGERO ================= */
         .edge-overlay {
             background: radial-gradient(circle at 50% 45%,
                 transparent 0%,
@@ -114,7 +123,6 @@
                 rgba(15, 23, 42, 0.4) 100%);
         }
 
-        /* ================= GRANO ================= */
         .noise {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
             opacity: .025;
@@ -134,8 +142,10 @@
         .card-enter > *:nth-child(4) { animation-delay: .26s; }
         .card-enter > *:nth-child(5) { animation-delay: .33s; }
         .card-enter > *:nth-child(6) { animation-delay: .40s; }
+        .card-enter > *:nth-child(7) { animation-delay: .47s; }
+        .card-enter > *:nth-child(8) { animation-delay: .54s; }
 
-        /* ================= BORDE LUMINOSO DE LA TARJETA ================= */
+        /* ================= BORDE LUMINOSO ================= */
         @keyframes girar-angulo {
             to { --angle: 360deg; }
         }
@@ -151,14 +161,14 @@
             z-index: 0;
         }
 
-        /* ================= LOGO FLOTANTE ================= */
+        /* ================= LOGO ================= */
         @keyframes flotar {
             0%, 100% { transform: translateY(0); }
             50%      { transform: translateY(-6px); }
         }
         .logo-float { animation: flotar 4s ease-in-out infinite; }
 
-        /* ================= TÍTULO DEGRADADO ================= */
+        /* ================= TÍTULO ================= */
         .titulo-degradado {
             background: linear-gradient(100deg, #ffffff 0%, #93c5fd 35%, #c4b5fd 55%, #ffffff 90%);
             background-size: 250% 100%;
@@ -207,6 +217,47 @@
             pointer-events: none;
         }
 
+        /* ================= FOCUS TV ================= */
+        @keyframes focus-tv {
+            0%, 100% {
+                transform: scale(1.04);
+                box-shadow: 0 0 0 4px rgba(34, 211, 238, .55),
+                            0 0 0 10px rgba(34, 211, 238, .18),
+                            0 20px 60px -10px rgba(34, 211, 238, .8);
+            }
+            50% {
+                transform: scale(1.06);
+                box-shadow: 0 0 0 6px rgba(34, 211, 238, .8),
+                            0 0 0 14px rgba(34, 211, 238, .25),
+                            0 22px 70px -8px rgba(34, 211, 238, 1);
+            }
+        }
+
+        .btn-download .play-badge {
+            position: absolute;
+            top: 50%;
+            left: 0.65rem;
+            transform: translateY(-50%) scale(0);
+            opacity: 0;
+            transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+            pointer-events: none;
+        }
+        .btn-download:focus-visible .play-badge,
+        .btn-download:focus .play-badge {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-download:focus,
+        .btn-download:focus-visible {
+            outline: none;
+            animation: focus-tv 1.6s ease-in-out infinite;
+        }
+
+        .btn-download:not(:focus):not(:focus-visible) {
+            animation: latido 3.2s ease-in-out infinite;
+        }
+
         /* ================= TOAST ================= */
         .toast {
             opacity: 0;
@@ -220,28 +271,46 @@
         }
 
         /* ============================================================
-           TARJETA RESPONSIVE INTELIGENTE
+           PADDING DE LA TARJETA
+           Reducido ~20% respecto a la versión anterior para que la
+           tarjeta sea más compacta en altura (TV / vista lejana),
+           manteniéndola elegante en PC.
+           ============================================================ */
+        .card-padding {
+            padding: 1.35rem 1.35rem;  /* 22px vertical / horizontal */
+        }
+        @media (min-width: 640px) {
+            .card-padding {
+                padding: 1.75rem 1.6rem;  /* 28px vertical / 26px horizontal */
+            }
+        }
+
+        /* ============================================================
+           TARJETA RESPONSIVE
            ============================================================ */
         .card-responsive {
-            width: clamp(320px, 65vmin, 480px);
+            width: clamp(320px, 62vmin, 460px);
             container-type: inline-size;
             container-name: tarjeta;
         }
 
-        @container tarjeta (max-width: 400px) {
-            .card-padding { padding: 1.5rem; }
-            .titulo-card  { font-size: 1.6rem; }
-            .subtitle-card { font-size: 0.875rem; }
-            .logo-card    { width: 3.25rem; height: 3.25rem; margin-bottom: 1rem; }
-            .logo-card svg { width: 1.5rem; height: 1.5rem; }
-            .tags-card    { margin-bottom: 1.5rem; }
-            .tags-card li { font-size: 0.68rem; padding: 0.2rem 0.7rem; }
-            .btn-download { font-size: 0.95rem; padding: 0.85rem 1rem; gap: 0.5rem; }
-            .btn-download svg { width: 1.1rem; height: 1.1rem; }
-            .nota-card    { font-size: 0.75rem; margin-top: 1.25rem; }
+        /* Cuando la tarjeta es pequeña (TV), reducimos aún más */
+        @container tarjeta (max-width: 420px) {
+            .card-padding { padding: 1.15rem 1.15rem; }
+            .titulo-card  { font-size: 1.5rem; }
+            .subtitle-card { font-size: 0.82rem; }
+            .logo-card    { width: 2.9rem; height: 2.9rem; margin-bottom: 0.75rem; }
+            .logo-card svg { width: 1.4rem; height: 1.4rem; }
+            .tags-card    { margin-bottom: 1rem; }
+            .tags-card li { font-size: 0.65rem; padding: 0.18rem 0.65rem; }
+            .btn-download { font-size: 0.9rem; padding: 0.75rem 0.9rem; gap: 0.45rem; }
+            .btn-download svg { width: 1rem; height: 1rem; }
+            .nota-card    { font-size: 0.7rem; margin-top: 0.85rem; }
+            .backup-box   { margin-top: 0.7rem; padding: 0.5rem 0.65rem; }
+            .backup-box p { font-size: 10px; }
+            .backup-box .backup-title { font-size: 9px; }
         }
 
-        /* ================= ACCESIBILIDAD ================= */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -263,11 +332,10 @@
         <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
     </div>
 
-    <!-- ================= FONDO: CARRUSEL DE PÓSTERS ================= -->
+    <!-- ================= FONDO: CARRUSEL ================= -->
     <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
          aria-hidden="true">
 
-        <!-- Fila 1 · Izquierda -->
         <div class="marquee-row-left gap-4">
             <div class="flex shrink-0 gap-4">
                 <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
@@ -287,7 +355,6 @@
             </div>
         </div>
 
-        <!-- Fila 2 · Derecha -->
         <div class="marquee-row-right gap-4">
             <div class="flex shrink-0 gap-4">
                 <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
@@ -307,7 +374,6 @@
             </div>
         </div>
 
-        <!-- Fila 3 · Izquierda (más lenta) -->
         <div class="marquee-row-left gap-4" style="animation-duration: 60s;">
             <div class="flex shrink-0 gap-4">
                 <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
@@ -328,26 +394,22 @@
         </div>
     </div>
 
-    <!-- ================= OVERLAY SUTIL ================= -->
     <div class="edge-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
     <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true"></div>
 
     <!-- ================= CONTENIDO ================= -->
-    <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-4 sm:p-6">
+    <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-3 sm:p-6">
         <div class="relative card-responsive">
 
-            <!-- Halo cónico giratorio -->
             <div class="card-glow" aria-hidden="true"></div>
 
-            <!-- Tarjeta -->
-            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 p-8 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl sm:p-10">
+            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl">
 
-                <!-- Brillo superior interno -->
                 <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/30 blur-3xl" aria-hidden="true"></div>
 
                 <!-- Logo -->
-                <div class="logo-card logo-float relative mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/50 ring-4 ring-blue-500/20" aria-hidden="true">
-                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="logo-card logo-float relative mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/50 ring-4 ring-blue-500/20 sm:mb-4 sm:h-16 sm:w-16" aria-hidden="true">
+                    <svg class="h-7 w-7 sm:h-8 sm:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
                         <line x1="12" y1="15" x2="12" y2="3"/>
@@ -355,34 +417,40 @@
                 </div>
 
                 <!-- Título -->
-                <h1 class="titulo-card titulo-degradado mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                <h1 class="titulo-card titulo-degradado mb-1.5 text-2xl font-extrabold tracking-tight sm:text-3xl">
                     TvXpertPlus
                 </h1>
 
                 <!-- Subtítulo -->
-                <p class="subtitle-card mb-6 text-sm font-medium text-slate-300 sm:text-base">
+                <p class="subtitle-card mb-4 text-xs font-medium text-slate-300 sm:mb-5 sm:text-sm">
                     TvXpertPlus, películas, series y más.
                 </p>
 
                 <!-- Etiquetas -->
-                <ul class="tags-card mb-8 flex list-none flex-wrap justify-center gap-2 p-0">
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
+                <ul class="tags-card mb-5 flex list-none flex-wrap justify-center gap-1.5 p-0 sm:mb-6 sm:gap-2">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
                         Versión 3.1
                     </li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
                         Formato APK
                     </li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
                         Android
                     </li>
                 </ul>
 
-                <!-- Botón de descarga directa (sin JavaScript, enlace nativo) -->
+                <!-- Botón de descarga directa -->
                 <a id="btnDescargar"
                    href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
-                   download="TvXpertPlus-3.1.apk"
-                   class="btn-download btn-latido btn-shine group relative inline-flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-6 py-4 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50 active:translate-y-0 active:scale-[0.985]">
-                    <svg class="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                   class="btn-download btn-shine group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 active:translate-y-0 active:scale-[0.985] sm:gap-3 sm:px-6 sm:py-3.5 sm:text-base">
+
+                    <span class="play-badge" aria-hidden="true">
+                        <svg class="h-5 w-5 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/>
+                        </svg>
+                    </span>
+
+                    <svg class="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
                         <line x1="12" y1="15" x2="12" y2="3"/>
@@ -390,8 +458,18 @@
                     <span class="relative z-10">Descargar APK</span>
                 </a>
 
+                <!-- Respaldo para Downloader -->
+                <div class="backup-box mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-left sm:mt-4 sm:px-3.5 sm:py-2.5">
+                    <p class="backup-title mb-1 text-[10px] font-semibold uppercase tracking-wider text-amber-300 sm:text-[11px]">
+                        ¿Usas Downloader? Copia esta URL
+                    </p>
+                    <p id="urlDescarga" class="select-all break-all font-mono text-[10px] leading-snug text-slate-200 sm:text-[11px]">
+                        https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk
+                    </p>
+                </div>
+
                 <!-- Nota -->
-                <p class="nota-card mt-6 text-xs leading-relaxed text-slate-400 sm:text-sm">
+                <p class="nota-card mt-3 text-[11px] leading-relaxed text-slate-400 sm:mt-4 sm:text-xs">
                     Al instalar, activa
                     <strong class="font-semibold text-slate-200">“Orígenes desconocidos”</strong>
                     en los ajustes de seguridad de tu dispositivo.
@@ -400,35 +478,44 @@
         </div>
     </main>
 
-    <!-- ================= TOAST (solo para mostrar feedback visual) ================= -->
+    <!-- ================= TOAST ================= -->
     <div id="toast"
          role="status"
          aria-live="polite"
          class="toast fixed bottom-6 left-1/2 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/90 px-5 py-2.5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl">
         <span class="grid h-5 w-5 place-items-center rounded-full bg-emerald-500 text-[11px] text-white">✓</span>
-        Iniciando descarga…
+        Descarga iniciada…
     </div>
 
     <script>
-        // Solo mostramos el toast como feedback visual, SIN interceptar el clic.
-        // El navegador maneja la descarga de forma nativa con el atributo download.
         document.addEventListener('DOMContentLoaded', function () {
             const boton = document.getElementById('btnDescargar');
             const toast = document.getElementById('toast');
             let temporizador;
 
             if (boton) {
-                // Enfoque inicial para navegación por control remoto (Smart TV)
-                boton.focus();
+                try { boton.focus(); } catch(e) {}
 
-                // Mostrar toast solo como aviso visual (sin preventDefault)
                 boton.addEventListener('click', function () {
                     if (!toast) return;
                     toast.classList.add('visible');
                     clearTimeout(temporizador);
                     temporizador = setTimeout(function () {
                         toast.classList.remove('visible');
-                    }, 3200);
+                    }, 3000);
+                });
+            }
+
+            const urlTexto = document.getElementById('urlDescarga');
+            if (urlTexto) {
+                urlTexto.addEventListener('click', function () {
+                    try {
+                        const rango = document.createRange();
+                        rango.selectNodeContents(urlTexto);
+                        const seleccion = window.getSelection();
+                        seleccion.removeAllRanges();
+                        seleccion.addRange(rango);
+                    } catch(e) {}
                 });
             }
         });
