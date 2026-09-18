@@ -8,7 +8,6 @@
     <meta name="color-scheme" content="dark light">
     <title>TvXpertPlus · Películas, Series y Más</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,19 +36,13 @@
 
         html { scroll-behavior: smooth; }
 
-        /* ============================================================
-           CURSOR DE PLAY AZUL
-           ============================================================ */
-        body,
-        a,
-        button,
-        [role="button"],
-        #btnDescargar {
+        /* Cursor de play azul */
+        body, a, button, [role="button"], #btnDescargar, #btnCopiar {
             cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 5 L27 16 L9 27 Z' fill='%232563eb' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, pointer;
         }
         input, textarea { cursor: text; }
 
-        /* ================= FONDO AURORA ================= */
+        /* ================= FONDO ================= */
         .blob {
             position: absolute;
             border-radius: 9999px;
@@ -73,7 +66,7 @@
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
 
-        /* ================= MARQUEE (scroll LENTO y calmado) ================= */
+        /* ================= MARQUEE ================= */
         @keyframes scroll-left {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -108,11 +101,11 @@
         }
 
         .poster {
-            /* Optimizaciones de rendimiento para el pool de 1000 */
             content-visibility: auto;
             contain: layout paint style;
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
             filter: saturate(1) brightness(0.95);
+            background-color: #1e293b;
         }
         .poster:hover {
             transform: scale(1.07) translateY(-8px);
@@ -133,7 +126,7 @@
             opacity: .025;
         }
 
-        /* ================= ENTRADA ESCALONADA ================= */
+        /* ================= ENTRADA ================= */
         @keyframes aparecer {
             from { opacity: 0; transform: translateY(18px) scale(.97); filter: blur(6px); }
             to   { opacity: 1; transform: translateY(0) scale(1);     filter: blur(0); }
@@ -147,6 +140,7 @@
         .card-enter > *:nth-child(4) { animation-delay: .26s; }
         .card-enter > *:nth-child(5) { animation-delay: .33s; }
         .card-enter > *:nth-child(6) { animation-delay: .40s; }
+        .card-enter > *:nth-child(7) { animation-delay: .47s; }
 
         /* ================= BORDE LUMINOSO ================= */
         @keyframes girar-angulo {
@@ -164,14 +158,12 @@
             z-index: 0;
         }
 
-        /* ================= LOGO ================= */
         @keyframes flotar {
             0%, 100% { transform: translateY(0); }
             50%      { transform: translateY(-6px); }
         }
         .logo-float { animation: flotar 4s ease-in-out infinite; }
 
-        /* ================= TÍTULO ================= */
         .titulo-degradado {
             background: linear-gradient(100deg, #ffffff 0%, #93c5fd 35%, #c4b5fd 55%, #ffffff 90%);
             background-size: 250% 100%;
@@ -193,7 +185,7 @@
             50%      { background-position: 100% 50%; }
         }
 
-        /* ================= BOTÓN ================= */
+        /* ================= BOTONES ================= */
         @keyframes latido {
             0%, 100% { box-shadow: 0 12px 34px -8px rgba(37, 99, 235, .7); }
             50%      { box-shadow: 0 12px 44px -4px rgba(59, 130, 246, 1); }
@@ -220,43 +212,28 @@
             pointer-events: none;
         }
 
-        /* ================= FOCUS TV ================= */
         @keyframes focus-tv {
             0%, 100% {
-                transform: scale(1.04);
+                transform: scale(1.03);
                 box-shadow: 0 0 0 4px rgba(34, 211, 238, .55),
                             0 0 0 10px rgba(34, 211, 238, .18),
                             0 20px 60px -10px rgba(34, 211, 238, .8);
             }
             50% {
-                transform: scale(1.06);
+                transform: scale(1.05);
                 box-shadow: 0 0 0 6px rgba(34, 211, 238, .8),
                             0 0 0 14px rgba(34, 211, 238, .25),
                             0 22px 70px -8px rgba(34, 211, 238, 1);
             }
         }
 
-        .btn-download .play-badge {
-            position: absolute;
-            top: 50%;
-            left: 0.65rem;
-            transform: translateY(-50%) scale(0);
-            opacity: 0;
-            transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .3s ease;
-            pointer-events: none;
-        }
-        .btn-download:focus-visible .play-badge,
-        .btn-download:focus .play-badge {
-            transform: translateY(-50%) scale(1);
-            opacity: 1;
-        }
-
         .btn-download:focus,
-        .btn-download:focus-visible {
+        .btn-download:focus-visible,
+        .btn-copy:focus,
+        .btn-copy:focus-visible {
             outline: none;
             animation: focus-tv 1.6s ease-in-out infinite;
         }
-
         .btn-download:not(:focus):not(:focus-visible) {
             animation: latido 3.2s ease-in-out infinite;
         }
@@ -273,14 +250,10 @@
             transform: translate(-50%, 0) scale(1);
         }
 
-        /* ================= PADDING Y RESPONSIVE ================= */
-        .card-padding {
-            padding: 1.35rem 1.35rem;
-        }
+        /* ================= PADDING / RESPONSIVE ================= */
+        .card-padding { padding: 1.35rem 1.35rem; }
         @media (min-width: 640px) {
-            .card-padding {
-                padding: 1.75rem 1.6rem;
-            }
+            .card-padding { padding: 1.75rem 1.6rem; }
         }
 
         .card-responsive {
@@ -297,92 +270,40 @@
             .logo-card svg { width: 1.4rem; height: 1.4rem; }
             .tags-card    { margin-bottom: 1rem; }
             .tags-card li { font-size: 0.65rem; padding: 0.18rem 0.65rem; }
-            .btn-download { font-size: 0.9rem; padding: 0.75rem 0.9rem; gap: 0.45rem; }
-            .btn-download svg { width: 1rem; height: 1rem; }
+            .btn-download, .btn-copy { font-size: 0.9rem; padding: 0.75rem 0.9rem; gap: 0.45rem; }
+            .btn-download svg, .btn-copy svg { width: 1rem; height: 1rem; }
             .nota-card    { font-size: 0.7rem; margin-top: 0.85rem; }
         }
 
-        /* ============================================================
-           MODO SMART TV (hover: none)
-           Reduce el crecimiento a solo ~1.35x (antes era 2x).
-           Se activa SOLO sin mouse (TV, control remoto).
-           ============================================================ */
+        /* Modo Smart TV */
         @media (hover: none) and (min-width: 768px) {
-            .card-responsive {
-                width: min(66vmin, 540px) !important;
-            }
-
-            .card-padding {
-                padding: 1.85rem 1.65rem !important;
-            }
-
+            .card-responsive { width: min(66vmin, 540px) !important; }
+            .card-padding { padding: 1.85rem 1.65rem !important; }
             .logo-card {
                 width: 3.6rem !important;
                 height: 3.6rem !important;
                 margin-bottom: 0.95rem !important;
                 border-radius: 1.15rem !important;
             }
-            .logo-card svg {
-                width: 1.75rem !important;
-                height: 1.75rem !important;
-            }
-
-            .titulo-card {
-                font-size: 2rem !important;
-                margin-bottom: 0.45rem !important;
-            }
-
-            .subtitle-card {
-                font-size: 0.98rem !important;
-                margin-bottom: 1.05rem !important;
-                line-height: 1.35 !important;
-            }
-
-            .tags-card {
-                gap: 0.45rem !important;
-                margin-bottom: 1.15rem !important;
-                flex-wrap: nowrap !important;
-            }
-            .tags-card li {
-                font-size: 0.78rem !important;
-                padding: 0.32rem 0.85rem !important;
-                white-space: nowrap !important;
-            }
-
-            .btn-download {
+            .logo-card svg { width: 1.75rem !important; height: 1.75rem !important; }
+            .titulo-card { font-size: 2rem !important; margin-bottom: 0.45rem !important; }
+            .subtitle-card { font-size: 0.98rem !important; margin-bottom: 1.05rem !important; line-height: 1.35 !important; }
+            .tags-card { gap: 0.45rem !important; margin-bottom: 1.15rem !important; flex-wrap: nowrap !important; }
+            .tags-card li { font-size: 0.78rem !important; padding: 0.32rem 0.85rem !important; white-space: nowrap !important; }
+            .btn-download, .btn-copy {
                 font-size: 1.08rem !important;
                 padding: 0.95rem 1.2rem !important;
                 gap: 0.6rem !important;
                 border-radius: 1rem !important;
             }
-            .btn-download > svg {
-                width: 1.25rem !important;
-                height: 1.25rem !important;
-            }
-            .btn-download .play-badge {
-                left: 0.75rem !important;
-            }
-            .btn-download .play-badge svg {
-                width: 1.25rem !important;
-                height: 1.25rem !important;
-            }
-
-            .nota-card {
-                font-size: 0.82rem !important;
-                margin-top: 0.85rem !important;
-                line-height: 1.5 !important;
-            }
-
-            .toast {
-                font-size: 1rem !important;
-                padding: 0.75rem 1.25rem !important;
-            }
+            .btn-download > svg, .btn-copy > svg { width: 1.25rem !important; height: 1.25rem !important; }
+            .nota-card { font-size: 0.82rem !important; margin-top: 0.85rem !important; line-height: 1.5 !important; }
+            .toast { font-size: 1rem !important; padding: 0.75rem 1.25rem !important; }
+            .copy-block { order: -1; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: .001ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: .001ms !important;
@@ -393,29 +314,25 @@
 
 <body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-slate-900 font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
-    <!-- ================= FONDO: AURORA ================= -->
     <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <div class="blob blob-1 -top-32 -left-24 h-[30rem] w-[30rem] bg-blue-500/80"></div>
         <div class="blob blob-2 -bottom-40 -right-20 h-[34rem] w-[34rem] bg-violet-500/70"></div>
         <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
     </div>
 
-    <!-- ================= FONDO: CARRUSEL DE 1000 IMÁGENES ================= -->
     <div id="marqueeContainer"
-         class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
-         aria-hidden="true">
-    </div>
+         class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.62] pointer-events-none select-none"
+         aria-hidden="true"></div>
 
     <div class="edge-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
     <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true"></div>
 
-    <!-- ================= CONTENIDO ================= -->
     <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-3 sm:p-6">
         <div class="relative card-responsive">
 
             <div class="card-glow" aria-hidden="true"></div>
 
-            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl">
+            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl flex flex-col">
 
                 <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/30 blur-3xl" aria-hidden="true"></div>
 
@@ -436,27 +353,30 @@
                 </p>
 
                 <ul class="tags-card mb-5 flex list-none flex-wrap justify-center gap-1.5 p-0 sm:mb-6 sm:gap-2">
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
-                        Versión 3.1
-                    </li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
-                        Formato APK
-                    </li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300 sm:px-3.5 sm:py-1 sm:text-xs">
-                        Android
-                    </li>
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Versión 3.1</li>
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Formato APK</li>
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Android</li>
                 </ul>
+
+                <!-- Copiar URL (aparece primero en TV) -->
+                <div class="copy-block w-full mb-3">
+                    <button id="btnCopiar"
+                            type="button"
+                            class="btn-copy relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl border border-cyan-400/40 bg-cyan-500/10 px-5 py-3 text-sm font-bold text-cyan-200 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300 hover:bg-cyan-500/20 hover:text-white active:scale-[0.985] sm:gap-3 sm:px-6 sm:py-3.5 sm:text-base">
+                        <svg class="h-4 w-4 shrink-0 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <span class="relative z-10">Copiar URL directa</span>
+                    </button>
+                    <p class="mt-2 text-[10px] leading-tight text-slate-500 sm:text-[11px]">
+                        Pégala en <strong class="text-slate-300">Downloader</strong> → descarga directa sin esperas.
+                    </p>
+                </div>
 
                 <a id="btnDescargar"
                    href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
                    class="btn-download btn-shine group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 active:translate-y-0 active:scale-[0.985] sm:gap-3 sm:px-6 sm:py-3.5 sm:text-base">
-
-                    <span class="play-badge" aria-hidden="true">
-                        <svg class="h-5 w-5 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/>
-                        </svg>
-                    </span>
-
                     <svg class="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
@@ -474,152 +394,192 @@
         </div>
     </main>
 
-    <!-- ================= TOAST ================= -->
     <div id="toast"
          role="status"
          aria-live="polite"
          class="toast fixed bottom-6 left-1/2 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/90 px-5 py-2.5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl">
         <span class="grid h-5 w-5 place-items-center rounded-full bg-emerald-500 text-[11px] text-white">✓</span>
-        Descarga iniciada…
+        <span id="toastTexto">Descarga iniciada…</span>
     </div>
 
     <script>
         // ============================================================
-        // POOL DE 1000 IMÁGENES CINEMATOGRÁFICAS
+        // URL DEL APK
         // ============================================================
-        // Estrategia:
-        // 1) 80 URLs curadas de Unsplash (cine, sci-fi, superhéroes,
-        //    fantasía, terror, drama, anime, neón) — máxima calidad.
-        // 2) 920 imágenes más generadas con picsum.photos usando
-        //    semillas únicas (seed) para obtener 1000 URLs distintas.
-        // Total: 1000 imágenes únicas.
-        // ============================================================
-        const POSTERS = (function () {
-            const list = [];
-
-            // --- 80 imágenes curadas de Unsplash ---
-            const curated = [
-                // Ciencia ficción / espacio
-                "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&q=70",
-                "https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=300&q=70",
-                "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300&q=70",
-                "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=70",
-                "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=70",
-                "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=300&q=70",
-                "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&q=70",
-                "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=300&q=70",
-                "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=70",
-                "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=300&q=70",
-                "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=70",
-                "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=300&q=70",
-
-                // Superhéroes / acción urbana
-                "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&q=70",
-                "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=300&q=70",
-                "https://images.unsplash.com/photo-1563089145-599997674d42?w=300&q=70",
-                "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300&q=70",
-                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&q=70",
-                "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=300&q=70",
-                "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=300&q=70",
-                "https://images.unsplash.com/photo-1517594422361-5eeb8ae275a9?w=300&q=70",
-                "https://images.unsplash.com/photo-1519638831568-d9897f54ed69?w=300&q=70",
-                "https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=300&q=70",
-                "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=300&q=70",
-                "https://images.unsplash.com/photo-1495556650867-99590cea3657?w=300&q=70",
-
-                // Fantasía / aventuras
-                "https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=300&q=70",
-                "https://images.unsplash.com/photo-1514539079130-25950c84af65?w=300&q=70",
-                "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=300&q=70",
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&q=70",
-                "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=300&q=70",
-                "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=300&q=70",
-                "https://images.unsplash.com/photo-1476900543704-4312b78632f8?w=300&q=70",
-                "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=300&q=70",
-                "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?w=300&q=70",
-                "https://images.unsplash.com/photo-1508186225823-0963cf9ab0de?w=300&q=70",
-                "https://images.unsplash.com/photo-1444927714506-8492d94b4e3d?w=300&q=70",
-                "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=300&q=70",
-
-                // Terror / suspenso / drama
-                "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=300&q=70",
-                "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&q=70",
-                "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=300&q=70",
-                "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&q=70",
-                "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300&q=70",
-                "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&q=70",
-                "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&q=70",
-                "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=300&q=70",
-                "https://images.unsplash.com/photo-1502139214982-d0ad755818d8?w=300&q=70",
-                "https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?w=300&q=70",
-                "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&q=70",
-                "https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?w=300&q=70",
-
-                // Anime / neón / colorido
-                "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300&q=70",
-                "https://images.unsplash.com/photo-1618172193763-c511deb635ca?w=300&q=70",
-                "https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=300&q=70",
-                "https://images.unsplash.com/photo-1541562232579-512a21360020?w=300&q=70",
-                "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&q=70",
-                "https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=300&q=70",
-                "https://images.unsplash.com/photo-1601987177651-8edfe6c20009?w=300&q=70",
-                "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=300&q=70",
-                "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=300&q=70",
-                "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=300&q=70",
-                "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=300&q=70",
-                "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=300&q=70",
-
-                // Abstracto / atmósfera cinematográfica
-                "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=300&q=70",
-                "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?w=300&q=70",
-                "https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=300&q=70",
-                "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&q=70",
-                "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=70",
-                "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=300&q=70",
-                "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?w=300&q=70",
-                "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=300&q=70",
-                "https://images.unsplash.com/photo-1517976487492-5750f3195933?w=300&q=70",
-                "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=300&q=70",
-                "https://images.unsplash.com/photo-1532978379173-523e16f371f9?w=300&q=70",
-                "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=300&q=70",
-                "https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=300&q=70",
-                "https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?w=300&q=70",
-                "https://images.unsplash.com/photo-1493514789931-586cb221d7a7?w=300&q=70",
-                "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=70",
-            ];
-            list.push.apply(list, curated);
-
-            // --- 920 imágenes adicionales con picsum.photos (semillas únicas) ---
-            // Cada seed genera una foto diferente y estable.
-            const TOTAL = 1000;
-            for (let i = list.length; i < TOTAL; i++) {
-                list.push('https://picsum.photos/seed/tvxpertplus' + i + '/300/450');
-            }
-
-            return list;
-        })();
+        const APK_URL = "https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk";
 
         // ============================================================
-        // DISTRIBUCIÓN EN 3 FILAS DE ~333 IMÁGENES CADA UNA
-        // Scroll MUY LENTO: 300s / 340s / 380s por ciclo.
+        // POOL DE PÓSTERS REALES DE PELÍCULAS (TMDB CDN)
+        // Cada póster tiene un nombre para identificar la película.
+        // Si quieres agregar más: copia la ruta de la imagen desde
+        // themoviedb.org (botón derecho → copiar URL) y añádela.
+        // Formato: https://image.tmdb.org/t/p/w300 + ruta
+        // ============================================================
+        const MOVIE_POSTERS = [
+            // ====== Acción / Superhéroes ======
+            { t: "Inception", p: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg" },
+            { t: "The Dark Knight", p: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
+            { t: "Interstellar", p: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
+            { t: "Avatar", p: "/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg" },
+            { t: "Avengers Endgame", p: "/or06FN3Dka5tukK1e9sl16pB3iy.jpg" },
+            { t: "Avengers Infinity War", p: "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg" },
+            { t: "The Batman", p: "/74xTEgt7R36Fpooo50r9T25onhq.jpg" },
+            { t: "Spider-Man No Way Home", p: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" },
+            { t: "Spider-Man Across the Spider-Verse", p: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" },
+            { t: "Black Panther", p: "/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" },
+            { t: "Black Panther Wakanda Forever", p: "/sv1xJUazXeYqALzczSZ3O6nkH75.jpg" },
+            { t: "Iron Man", p: "/78lPtwv72eTNqFW9COBYI0dWDJa.jpg" },
+            { t: "Thor Ragnarok", p: "/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg" },
+            { t: "Doctor Strange", p: "/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg" },
+            { t: "Doctor Strange 2", p: "/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg" },
+            { t: "Captain America Civil War", p: "/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg" },
+            { t: "Guardians of the Galaxy", p: "/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg" },
+            { t: "Guardians of the Galaxy Vol 3", p: "/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg" },
+            { t: "Wonder Woman", p: "/imekS7f1OuHyUP2LAiTEM0zBzUz.jpg" },
+            { t: "Aquaman", p: "/5maGm5hO8L1nJ9y2V07zGVdKjq8.jpg" },
+            { t: "Shazam", p: "/xnopI5Xtky18MPhK40cZAGAOVeV.jpg" },
+            { t: "Man of Steel", p: "/8GFtkImmK0K1VaUCCiS1zBqvv8L.jpg" },
+            { t: "Joker", p: "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" },
+            { t: "Deadpool", p: "/fSRb7vyIP8rQpL0I47P3qUsEKX3.jpg" },
+            { t: "Deadpool 2", p: "/to0spRl1CMDvyUbOnbb4fTk3VAd.jpg" },
+            { t: "Logan", p: "/fnbjcRDYn6YviCcePDnGdyAkYsB.jpg" },
+            { t: "Venom", p: "/2uNW4WbgBXL25BAbXGLnLqB7l0o.jpg" },
+            { t: "Venom Let There Be Carnage", p: "/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg" },
+            { t: "Ant-Man", p: "/r5SrC0cquAYjEL6ZVuwz2nPZVXn.jpg" },
+            { t: "Shang-Chi", p: "/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg" },
+            { t: "Eternals", p: "/bcCBq9N1EMo3daNIjWJ8kYvrQm6.jpg" },
+
+            // ====== Ciencia ficción ======
+            { t: "The Matrix", p: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" },
+            { t: "The Matrix Resurrections", p: "/8c4a8kE7PizaGQQnditMmI1xbk0.jpg" },
+            { t: "Dune", p: "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" },
+            { t: "Dune Part Two", p: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg" },
+            { t: "Blade Runner 2049", p: "/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg" },
+            { t: "Arrival", p: "/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg" },
+            { t: "Tenet", p: "/k68nPLbIST6NP96JmTxmZijEvMk.jpg" },
+            { t: "Oppenheimer", p: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" },
+            { t: "The Martian", p: "/5aGhaIHGuXevt7QAaO2jVwGgGu3.jpg" },
+            { t: "Gravity", p: "/kZ2nZw8D681aphje8NJi8EfbL1U.jpg" },
+            { t: "Ready Player One", p: "/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg" },
+            { t: "Tron Legacy", p: "/vou76E5dJa5S4j0d9ln1s1U9Wn2.jpg" },
+            { t: "The Fifth Element", p: "/fPtlCO1yQtnoLHOwKtWz7db6RGU.jpg" },
+            { t: "Star Wars The Force Awakens", p: "/wqnLHWxbg0ZtYFHg9pQn4XrU2z4.jpg" },
+            { t: "Star Wars The Last Jedi", p: "/kOVEVeg59E0wsnXmF9nrh6OmWII.jpg" },
+            { t: "Rogue One", p: "/i0yw1mFbB7sNGHCs7EXZPzFkdA1.jpg" },
+            { t: "Star Trek", p: "/hN2YN8c2TbXpZx3vJKrR4TYM7yR.jpg" },
+            { t: "Pacific Rim", p: "/8wo4eN8dWKaKlxhSvBz19uvj8gA.jpg" },
+            { t: "Independence Day", p: "/p0BPQGSPoSa8Ml0MEAdlEOll3u.jpg" },
+            { t: "Prometheus", p: "/m0ObOaJBerZ3Unc74l471ar8Iiy.jpg" },
+
+            // ====== Drama / Clásicos ======
+            { t: "The Shawshank Redemption", p: "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" },
+            { t: "The Godfather", p: "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" },
+            { t: "The Godfather Part II", p: "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg" },
+            { t: "Pulp Fiction", p: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg" },
+            { t: "Fight Club", p: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
+            { t: "Forrest Gump", p: "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg" },
+            { t: "Titanic", p: "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg" },
+            { t: "Gladiator", p: "/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg" },
+            { t: "The Green Mile", p: "/velWPhVMQeQKcxggNEU8YmIo52R.jpg" },
+            { t: "Schindler's List", p: "/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" },
+            { t: "Goodfellas", p: "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg" },
+            { t: "The Wolf of Wall Street", p: "/34m2tygAYBGqA9MXKhRDtzYd4YL.jpg" },
+            { t: "Catch Me If You Can", p: "/sdwjQEM869JFwMytTmvr6ggvaUl.jpg" },
+            { t: "The Departed", p: "/nT97ifVT2J1yMQmeq20Qblg61T.jpg" },
+            { t: "Shutter Island", p: "/kve20tXwUZpu4GUX8l6X7Z4jmL6.jpg" },
+            { t: "The Prestige", p: "/bdN3gXuIZYaJP7ftKK2sU0nPtEA.jpg" },
+            { t: "Parasite", p: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
+            { t: "1917", p: "/iZf0KyrE25z1sage4SYFLCCrMi9.jpg" },
+            { t: "La La Land", p: "/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg" },
+            { t: "Whiplash", p: "/7fn624j5lj3xTme2SgiLCeuedmO.jpg" },
+
+            // ====== Terror / Suspenso ======
+            { t: "The Conjuring", p: "/wVYREutTvI2tmxr6ujrHT704wGF.jpg" },
+            { t: "The Conjuring 2", p: "/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg" },
+            { t: "Insidious", p: "/lXhgAIns4P7Xz3r8N0w3T3YbWv7.jpg" },
+            { t: "Get Out", p: "/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg" },
+            { t: "Us", p: "/ux2dU1jQ2ACIMShzB3yP93Udpzc.jpg" },
+            { t: "A Quiet Place", p: "/nOC7bc2VJGE046tFE7onhKQLqZd.jpg" },
+            { t: "A Quiet Place Part II", p: "/4q2hz2m8hubgvijz8Ez0T2Os2Yv.jpg" },
+            { t: "Hereditary", p: "/p9fmuz2Oj3HtEJEqbIwkFGUhVXD.jpg" },
+            { t: "Midsommar", p: "/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg" },
+            { t: "The Witch", p: "/zap5hpFCWSvdWSuPGAQyjUv2wAC.jpg" },
+            { t: "It", p: "/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg" },
+            { t: "It Chapter Two", p: "/zfE0R94v1E8cuKAerbskfD3VfUt.jpg" },
+            { t: "The Nun", p: "/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg" },
+            { t: "Halloween", p: "/ir9eyz1mtgsohjzojlvLbH8Xj6P.jpg" },
+            { t: "Scream", p: "/1m3W6cpgwuIyjtg5nSnPx7yFkXW.jpg" },
+
+            // ====== Animación / Anime ======
+            { t: "Spirited Away", p: "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" },
+            { t: "My Neighbor Totoro", p: "/rtGDOeG9LzoerkDGZF9dnVeLppL.jpg" },
+            { t: "Princess Mononoke", p: "/cMYCDADoLKLbB83gdz6BxPUaIXR.jpg" },
+            { t: "Howl's Moving Castle", p: "/TkTPELv4kC3u1lkloush8skOjE.jpg" },
+            { t: "Your Name", p: "/q719jXXEzOoYaps6babgKnONONX.jpg" },
+            { t: "Akira", p: "/neZ0ykEsPqxamsXoHnyQV4Re9tl.jpg" },
+            { t: "Ghost in the Shell", p: "/9gC88zYUBARRSThcG93MvW14sqx.jpg" },
+            { t: "Spider-Verse", p: "/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg" },
+            { t: "Toy Story", p: "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg" },
+            { t: "Toy Story 3", p: "/AbbXspMOwdvwWZgVN0nabZq03Ec.jpg" },
+            { t: "Toy Story 4", p: "/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg" },
+            { t: "Finding Nemo", p: "/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg" },
+            { t: "The Incredibles", p: "/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg" },
+            { t: "Coco", p: "/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg" },
+            { t: "Up", p: "/vpbaStTMt8qqXaEgnOR2EE4DNJk.jpg" },
+            { t: "WALL-E", p: "/hbhFnRzzg6ZDmm8YAmxBnQpQIPh.jpg" },
+            { t: "Ratatouille", p: "/npHNjldbeTHdKKw28bJKs7lzqzj.jpg" },
+            { t: "Inside Out", p: "/aAmfIX3TT40zUHGcCKrlOZRKC7u.jpg" },
+            { t: "Soul", p: "/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg" },
+            { t: "Luca", p: "/jTswp6KyDYKtvC52GbHagrZbGvD.jpg" },
+
+            // ====== Fantasía / Aventura ======
+            { t: "The Lord of the Rings Fellowship", p: "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg" },
+            { t: "The Lord of the Rings Two Towers", p: "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg" },
+            { t: "The Lord of the Rings Return of the King", p: "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" },
+            { t: "The Hobbit", p: "/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg" },
+            { t: "Harry Potter Sorcerer's Stone", p: "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg" },
+            { t: "Harry Potter Chamber of Secrets", p: "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg" },
+            { t: "Harry Potter Prisoner of Azkaban", p: "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg" },
+            { t: "Harry Potter Goblet of Fire", p: "/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg" },
+            { t: "Harry Potter Deathly Hallows 2", p: "/c54HpQmuwXjHq2C9wmoACjxoom3.jpg" },
+            { t: "Fantastic Beasts", p: "/fLsaFKExQt05yqjoL6m7W8Ht7d2.jpg" },
+            { t: "Pirates of the Caribbean", p: "/z8onk7LV9Mmw6zKz4hT6pzzvmvl.jpg" },
+            { t: "The Chronicles of Narnia", p: "/iREd0rNCjYdf5Ar0vfaWMCx3Puj.jpg" },
+            { t: "Jumanji Welcome to the Jungle", p: "/pSgXKPU5h6U89ipF7HBYajvYt7j.jpg" },
+            { t: "Free Guy", p: "/xmbU4JTUm8rsdtn7Y3Fcm30GpeT.jpg" },
+            { t: "Minecraft Movie", p: "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg" },
+
+            // ====== Comedia ======
+            { t: "The Grand Budapest Hotel", p: "/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg" },
+            { t: "Superbad", p: "/ek8e8txUyUwd2BNqj6lFEerJfbq.jpg" },
+            { t: "The Hangover", p: "/uluhlXubGu1VxU63X9VHCLWDAYP.jpg" },
+            { t: "Anchorman", p: "/2EO5Qr0IVQmnW3jF9yW6JvIYDDW.jpg" },
+            { t: "Step Brothers", p: "/nvz6EMnEjHqoq7FvNMJhSiqKbSw.jpg" },
+            { t: "Borat", p: "/3l4Upp6rMK8YqmHq3gjPWGK4RjS.jpg" },
+        ];
+
+        // ============================================================
+        // Construye la lista completa de URLs (w300 = tamaño ideal)
+        // ============================================================
+        const POSTERS = MOVIE_POSTERS.map(function (m) {
+            return "https://image.tmdb.org/t/p/w300" + m.p;
+        });
+
+        // ============================================================
+        // DISTRIBUCIÓN EN 3 FILAS + SCROLL LENTO
+        // Cada fila recorre TODA la lista de pósters de películas.
         // ============================================================
         (function buildMarquee() {
             const contenedor = document.getElementById('marqueeContainer');
-            if (!contenedor) return;
-
-            const total = POSTERS.length;
-            const porFila = Math.ceil(total / 3);
+            if (!contenedor || !POSTERS.length) return;
 
             const filas = [
-                { dir: 'left',  dur: '300s', inicio: 0 },
-                { dir: 'right', dur: '340s', inicio: porFila },
-                { dir: 'left',  dur: '380s', inicio: porFila * 2 },
+                { dir: 'left',  dur: '180s' },
+                { dir: 'right', dur: '220s' },
+                { dir: 'left',  dur: '260s' },
             ];
 
-            filas.forEach(function (fila) {
-                const chunk = POSTERS.slice(fila.inicio, fila.inicio + porFila);
-                if (!chunk.length) return;
-
+            filas.forEach(function (fila, idx) {
                 const row = document.createElement('div');
                 row.className = (fila.dir === 'left' ? 'marquee-row-left' : 'marquee-row-right') + ' gap-4';
                 row.style.animationDuration = fila.dur;
@@ -630,16 +590,21 @@
                     bloque.className = 'flex shrink-0 gap-4';
                     if (copia === 1) bloque.setAttribute('aria-hidden', 'true');
 
-                    chunk.forEach(function (url) {
+                    // Rotamos el orden para que cada fila muestre pelis distintas
+                    const inicio = idx * 13;
+                    const orden = POSTERS.slice(inicio).concat(POSTERS.slice(0, inicio));
+
+                    orden.forEach(function (url) {
                         const img = document.createElement('img');
                         img.src = url;
                         img.loading = 'lazy';
                         img.decoding = 'async';
                         img.className = 'poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44';
-                        img.alt = copia === 0 ? 'Poster de película o serie' : '';
+                        img.alt = '';
                         img.addEventListener('error', function () {
+                            // Fallback: si un póster no carga, mostramos placeholder
                             if (this.src.indexOf('placehold.co') === -1) {
-                                this.src = 'https://placehold.co/300x450/1e293b/ffffff?text=TvXpertPlus';
+                                this.src = 'https://placehold.co/300x450/1e293b/60a5fa?text=Pelicula';
                             }
                         });
                         bloque.appendChild(img);
@@ -653,25 +618,84 @@
         })();
 
         // ============================================================
-        // INTERACCIÓN DEL BOTÓN
+        // BOTONES: copiar URL y descargar
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function () {
-            const boton = document.getElementById('btnDescargar');
+        function mostrarToast(texto) {
             const toast = document.getElementById('toast');
-            let temporizador;
+            const toastTexto = document.getElementById('toastTexto');
+            if (!toast) return;
+            if (toastTexto && texto) toastTexto.textContent = texto;
+            toast.classList.add('visible');
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(function () {
+                toast.classList.remove('visible');
+            }, 2600);
+        }
 
-            if (boton) {
-                try { boton.focus(); } catch(e) {}
+        function copiarURL() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(APK_URL).then(function () {
+                    mostrarToast('✓ URL copiada. Pégala en Downloader.');
+                }).catch(copiarFallback);
+            } else {
+                copiarFallback();
+            }
+        }
 
-                boton.addEventListener('click', function () {
-                    if (!toast) return;
-                    toast.classList.add('visible');
-                    clearTimeout(temporizador);
-                    temporizador = setTimeout(function () {
-                        toast.classList.remove('visible');
-                    }, 3000);
+        function copiarFallback() {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = APK_URL;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.top = '-1000px';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                ta.setSelectionRange(0, APK_URL.length);
+                const ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                mostrarToast(ok ? '✓ URL copiada. Pégala en Downloader.' : 'Copia manual: ' + APK_URL);
+            } catch (e) {
+                mostrarToast('Copia manual: ' + APK_URL);
+            }
+        }
+
+        function esEntornoTV() {
+            try {
+                const ua = navigator.userAgent || '';
+                if (/downloader|aftv|firetv|fire tv|android tv|googletv|smart-tv|smarttv|hbbtv/i.test(ua)) return true;
+                if (window.matchMedia && window.matchMedia('(hover: none)').matches && window.innerWidth >= 768) return true;
+            } catch (e) {}
+            return false;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnCopiar = document.getElementById('btnCopiar');
+            const btnDescargar = document.getElementById('btnDescargar');
+
+            if (btnCopiar) {
+                btnCopiar.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    copiarURL();
                 });
             }
+
+            if (btnDescargar) {
+                btnDescargar.addEventListener('click', function () {
+                    mostrarToast('Descarga iniciada…');
+                });
+            }
+
+            setTimeout(function () {
+                try {
+                    if (esEntornoTV() && btnCopiar) {
+                        btnCopiar.focus();
+                    } else if (btnDescargar) {
+                        btnDescargar.focus();
+                    }
+                } catch (e) {}
+            }, 200);
         });
     </script>
 </body>
