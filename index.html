@@ -15,12 +15,7 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            500: '#2563eb',
-                            600: '#1d4ed8',
-                            700: '#1e40af',
-                        }
+                        brand: { 50: '#eff6ff', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af' }
                     }
                 }
             }
@@ -28,12 +23,7 @@
     </script>
 
     <style>
-        @property --angle {
-            syntax: '<angle>';
-            initial-value: 0deg;
-            inherits: false;
-        }
-
+        @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         html { scroll-behavior: smooth; }
 
         body, a, button, [role="button"], #btnDescargar {
@@ -41,7 +31,6 @@
         }
         input, textarea { cursor: text; }
 
-        /* Aurora */
         .blob {
             position: absolute;
             border-radius: 9999px;
@@ -65,7 +54,6 @@
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
 
-        /* Marquee */
         @keyframes scroll-left {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -103,12 +91,10 @@
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
             filter: saturate(1) brightness(0.95);
             background-color: #1e293b;
-        }
-        .poster:hover {
-            transform: scale(1.07) translateY(-8px);
-            filter: saturate(1.2) brightness(1.1);
-            box-shadow: 0 22px 50px -12px rgba(59, 130, 246, .9);
-            z-index: 5;
+            /* Los pósters NO son interactivos ni enfocables */
+            pointer-events: none !important;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .poster.is-error {
             display: none !important;
@@ -304,7 +290,7 @@
 
 <body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-slate-900 font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
-    <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+    <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true" tabindex="-1">
         <div class="blob blob-1 -top-32 -left-24 h-[30rem] w-[30rem] bg-blue-500/80"></div>
         <div class="blob blob-2 -bottom-40 -right-20 h-[34rem] w-[34rem] bg-violet-500/70"></div>
         <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
@@ -312,21 +298,21 @@
 
     <div id="marqueeContainer"
          class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.62] pointer-events-none select-none"
-         aria-hidden="true"></div>
+         aria-hidden="true" tabindex="-1"></div>
 
-    <div class="edge-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
-    <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true"></div>
+    <div class="edge-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true" tabindex="-1"></div>
+    <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true" tabindex="-1"></div>
 
-    <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-3 sm:p-6">
-        <div class="relative card-responsive">
+    <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-3 sm:p-6" tabindex="-1">
+        <div class="relative card-responsive" tabindex="-1">
 
-            <div class="card-glow" aria-hidden="true"></div>
+            <div class="card-glow" aria-hidden="true" tabindex="-1"></div>
 
-            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl flex flex-col">
+            <div class="card-enter card-padding relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl flex flex-col" tabindex="-1">
 
-                <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/30 blur-3xl" aria-hidden="true"></div>
+                <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/30 blur-3xl" aria-hidden="true" tabindex="-1"></div>
 
-                <div class="logo-card logo-float relative mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/50 ring-4 ring-blue-500/20 sm:mb-4 sm:h-16 sm:w-16" aria-hidden="true">
+                <div class="logo-card logo-float relative mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/50 ring-4 ring-blue-500/20 sm:mb-4 sm:h-16 sm:w-16" aria-hidden="true" tabindex="-1">
                     <svg class="h-7 w-7 sm:h-8 sm:w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
@@ -334,23 +320,25 @@
                     </svg>
                 </div>
 
-                <h1 class="titulo-card titulo-degradado mb-1.5 text-2xl font-extrabold tracking-tight sm:text-3xl">
+                <h1 class="titulo-card titulo-degradado mb-1.5 text-2xl font-extrabold tracking-tight sm:text-3xl" tabindex="-1">
                     TvXpertPlus
                 </h1>
 
-                <p class="subtitle-card mb-4 text-xs font-medium text-slate-300 sm:mb-5 sm:text-sm">
+                <p class="subtitle-card mb-4 text-xs font-medium text-slate-300 sm:mb-5 sm:text-sm" tabindex="-1">
                     TvXpertPlus, películas, series y más.
                 </p>
 
-                <ul class="tags-card mb-5 flex list-none flex-wrap justify-center gap-1.5 p-0 sm:mb-6 sm:gap-2">
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Versión 3.1</li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Formato APK</li>
-                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Android</li>
+                <ul class="tags-card mb-5 flex list-none flex-wrap justify-center gap-1.5 p-0 sm:mb-6 sm:gap-2" tabindex="-1">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs" tabindex="-1">Versión 3.1</li>
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs" tabindex="-1">Formato APK</li>
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs" tabindex="-1">Android</li>
                 </ul>
 
-                <!-- Botón principal de descarga -->
+                <!-- ÚNICO elemento enfocable de la página -->
                 <a id="btnDescargar"
                    href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
+                   tabindex="0"
+                   autofocus
                    class="btn-download btn-shine group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 active:translate-y-0 active:scale-[0.985] sm:gap-3 sm:px-6 sm:py-3.5 sm:text-base">
                     <svg class="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -360,7 +348,7 @@
                     <span class="relative z-10">Descargar APK</span>
                 </a>
 
-                <p class="nota-card mt-3 text-[11px] leading-relaxed text-slate-400 sm:mt-4 sm:text-xs">
+                <p class="nota-card mt-3 text-[11px] leading-relaxed text-slate-400 sm:mt-4 sm:text-xs" tabindex="-1">
                     Al instalar, activa
                     <strong class="font-semibold text-slate-200">“Orígenes desconocidos”</strong>
                     en los ajustes de seguridad de tu dispositivo.
@@ -372,7 +360,8 @@
     <div id="toast"
          role="status"
          aria-live="polite"
-         class="toast fixed bottom-6 left-1/2 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/90 px-5 py-2.5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl">
+         class="toast fixed bottom-6 left-1/2 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/90 px-5 py-2.5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl"
+         tabindex="-1">
         <span class="grid h-5 w-5 place-items-center rounded-full bg-emerald-500 text-[11px] text-white">✓</span>
         <span id="toastTexto">Descarga iniciada…</span>
     </div>
@@ -468,10 +457,12 @@
                 const row = document.createElement('div');
                 row.className = (fila.dir === 'left' ? 'marquee-row-left' : 'marquee-row-right') + ' gap-4';
                 row.style.animationDuration = fila.dur;
+                row.setAttribute('tabindex', '-1');
 
                 for (let copia = 0; copia < 2; copia++) {
                     const bloque = document.createElement('div');
                     bloque.className = 'flex shrink-0 gap-4';
+                    bloque.setAttribute('tabindex', '-1');
                     if (copia === 1) bloque.setAttribute('aria-hidden', 'true');
 
                     const orden = POSTERS.slice(fila.offset).concat(POSTERS.slice(0, fila.offset));
@@ -480,8 +471,10 @@
                         const img = document.createElement('img');
                         img.loading = 'lazy';
                         img.decoding = 'async';
-                        img.className = 'poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44';
+                        img.className = 'poster h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44';
                         img.alt = '';
+                        img.setAttribute('tabindex', '-1');
+                        img.setAttribute('draggable', 'false');
                         img.addEventListener('error', function () {
                             this.classList.add('is-error');
                         });
@@ -510,17 +503,40 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const btnDescargar = document.getElementById('btnDescargar');
+            if (!btnDescargar) return;
 
-            if (btnDescargar) {
-                // Foco al cargar para navegación por control remoto en TV
+            // Forzar foco repetidamente en los primeros segundos
+            // (Downloader a veces roba el foco al cargar)
+            const intentos = [0, 100, 300, 600, 1000, 1500, 2200];
+            intentos.forEach(function (ms) {
                 setTimeout(function () {
-                    try { btnDescargar.focus(); } catch(e) {}
-                }, 200);
+                    try { btnDescargar.focus(); } catch (e) {}
+                }, ms);
+            });
 
-                btnDescargar.addEventListener('click', function () {
-                    mostrarToast('Descarga iniciada…');
-                });
-            }
+            // Si el foco se va a cualquier otro sitio, lo devolvemos al botón.
+            // En TV esto hace que el "cursor" del mando no vague por la página:
+            // siempre queda sobre el botón.
+            btnDescargar.addEventListener('blur', function () {
+                setTimeout(function () {
+                    try { btnDescargar.focus(); } catch (e) {}
+                }, 30);
+            });
+
+            // Bloquear Tab / flechas para que no muevan el foco fuera del botón
+            document.addEventListener('keydown', function (e) {
+                const teclasBloqueadas = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'];
+                if (teclasBloqueadas.indexOf(e.key) !== -1) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    try { btnDescargar.focus(); } catch (err) {}
+                }
+            }, true);
+
+            // Feedback visual al pulsar OK
+            btnDescargar.addEventListener('click', function () {
+                mostrarToast('Descarga iniciada…');
+            });
         });
     </script>
 </body>
