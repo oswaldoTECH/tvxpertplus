@@ -36,13 +36,12 @@
 
         html { scroll-behavior: smooth; }
 
-        /* Cursor de play azul */
         body, a, button, [role="button"], #btnDescargar, #btnCopiar {
             cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 5 L27 16 L9 27 Z' fill='%232563eb' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, pointer;
         }
         input, textarea { cursor: text; }
 
-        /* ================= FONDO ================= */
+        /* Aurora */
         .blob {
             position: absolute;
             border-radius: 9999px;
@@ -66,7 +65,7 @@
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
 
-        /* ================= MARQUEE ================= */
+        /* Marquee — ahora MUCHO más lento */
         @keyframes scroll-left {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -79,12 +78,12 @@
         .marquee-row-left {
             display: flex;
             width: max-content;
-            animation: scroll-left 60s linear infinite;
+            animation: scroll-left 400s linear infinite;
         }
         .marquee-row-right {
             display: flex;
             width: max-content;
-            animation: scroll-right 70s linear infinite;
+            animation: scroll-right 500s linear infinite;
         }
         .marquee-row-left:hover,
         .marquee-row-right:hover { animation-play-state: paused; }
@@ -101,8 +100,6 @@
         }
 
         .poster {
-            content-visibility: auto;
-            contain: layout paint style;
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
             filter: saturate(1) brightness(0.95);
             background-color: #1e293b;
@@ -112,6 +109,10 @@
             filter: saturate(1.2) brightness(1.1);
             box-shadow: 0 22px 50px -12px rgba(59, 130, 246, .9);
             z-index: 5;
+        }
+        /* Si una imagen falla, la ocultamos limpiamente (sin texto raro) */
+        .poster.is-error {
+            display: none !important;
         }
 
         .edge-overlay {
@@ -126,7 +127,6 @@
             opacity: .025;
         }
 
-        /* ================= ENTRADA ================= */
         @keyframes aparecer {
             from { opacity: 0; transform: translateY(18px) scale(.97); filter: blur(6px); }
             to   { opacity: 1; transform: translateY(0) scale(1);     filter: blur(0); }
@@ -142,7 +142,6 @@
         .card-enter > *:nth-child(6) { animation-delay: .40s; }
         .card-enter > *:nth-child(7) { animation-delay: .47s; }
 
-        /* ================= BORDE LUMINOSO ================= */
         @keyframes girar-angulo {
             to { --angle: 360deg; }
         }
@@ -185,7 +184,6 @@
             50%      { background-position: 100% 50%; }
         }
 
-        /* ================= BOTONES ================= */
         @keyframes latido {
             0%, 100% { box-shadow: 0 12px 34px -8px rgba(37, 99, 235, .7); }
             50%      { box-shadow: 0 12px 44px -4px rgba(59, 130, 246, 1); }
@@ -238,7 +236,6 @@
             animation: latido 3.2s ease-in-out infinite;
         }
 
-        /* ================= TOAST ================= */
         .toast {
             opacity: 0;
             transform: translate(-50%, 22px) scale(.95);
@@ -250,7 +247,6 @@
             transform: translate(-50%, 0) scale(1);
         }
 
-        /* ================= PADDING / RESPONSIVE ================= */
         .card-padding { padding: 1.35rem 1.35rem; }
         @media (min-width: 640px) {
             .card-padding { padding: 1.75rem 1.6rem; }
@@ -275,7 +271,6 @@
             .nota-card    { font-size: 0.7rem; margin-top: 0.85rem; }
         }
 
-        /* Modo Smart TV */
         @media (hover: none) and (min-width: 768px) {
             .card-responsive { width: min(66vmin, 540px) !important; }
             .card-padding { padding: 1.85rem 1.65rem !important; }
@@ -358,7 +353,6 @@
                     <li class="rounded-full border border-white/10 bg-white/5 px-3 py-0.5 text-[11px] font-semibold text-slate-200 backdrop-blur-sm sm:px-3.5 sm:py-1 sm:text-xs">Android</li>
                 </ul>
 
-                <!-- Copiar URL (aparece primero en TV) -->
                 <div class="copy-block w-full mb-3">
                     <button id="btnCopiar"
                             type="button"
@@ -403,210 +397,141 @@
     </div>
 
     <script>
-        // ============================================================
-        // URL DEL APK
-        // ============================================================
         const APK_URL = "https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk";
 
         // ============================================================
-        // POOL DE PÓSTERS REALES DE PELÍCULAS (TMDB CDN)
-        // Cada póster tiene un nombre para identificar la película.
-        // Si quieres agregar más: copia la ruta de la imagen desde
-        // themoviedb.org (botón derecho → copiar URL) y añádela.
-        // Formato: https://image.tmdb.org/t/p/w300 + ruta
+        // PÓSTERS REALES DE PELÍCULAS — solo rutas verificadas de TMDB
+        // Si alguna falla, se oculta limpiamente (no aparece "PELÍCULA")
         // ============================================================
         const MOVIE_POSTERS = [
-            // ====== Acción / Superhéroes ======
-            { t: "Inception", p: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg" },
-            { t: "The Dark Knight", p: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
-            { t: "Interstellar", p: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
-            { t: "Avatar", p: "/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg" },
-            { t: "Avengers Endgame", p: "/or06FN3Dka5tukK1e9sl16pB3iy.jpg" },
-            { t: "Avengers Infinity War", p: "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg" },
-            { t: "The Batman", p: "/74xTEgt7R36Fpooo50r9T25onhq.jpg" },
-            { t: "Spider-Man No Way Home", p: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" },
-            { t: "Spider-Man Across the Spider-Verse", p: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" },
-            { t: "Black Panther", p: "/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" },
-            { t: "Black Panther Wakanda Forever", p: "/sv1xJUazXeYqALzczSZ3O6nkH75.jpg" },
-            { t: "Iron Man", p: "/78lPtwv72eTNqFW9COBYI0dWDJa.jpg" },
-            { t: "Thor Ragnarok", p: "/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg" },
-            { t: "Doctor Strange", p: "/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg" },
-            { t: "Doctor Strange 2", p: "/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg" },
-            { t: "Captain America Civil War", p: "/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg" },
-            { t: "Guardians of the Galaxy", p: "/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg" },
-            { t: "Guardians of the Galaxy Vol 3", p: "/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg" },
-            { t: "Wonder Woman", p: "/imekS7f1OuHyUP2LAiTEM0zBzUz.jpg" },
-            { t: "Aquaman", p: "/5maGm5hO8L1nJ9y2V07zGVdKjq8.jpg" },
-            { t: "Shazam", p: "/xnopI5Xtky18MPhK40cZAGAOVeV.jpg" },
-            { t: "Man of Steel", p: "/8GFtkImmK0K1VaUCCiS1zBqvv8L.jpg" },
-            { t: "Joker", p: "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" },
-            { t: "Deadpool", p: "/fSRb7vyIP8rQpL0I47P3qUsEKX3.jpg" },
-            { t: "Deadpool 2", p: "/to0spRl1CMDvyUbOnbb4fTk3VAd.jpg" },
-            { t: "Logan", p: "/fnbjcRDYn6YviCcePDnGdyAkYsB.jpg" },
-            { t: "Venom", p: "/2uNW4WbgBXL25BAbXGLnLqB7l0o.jpg" },
-            { t: "Venom Let There Be Carnage", p: "/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg" },
-            { t: "Ant-Man", p: "/r5SrC0cquAYjEL6ZVuwz2nPZVXn.jpg" },
-            { t: "Shang-Chi", p: "/1BIoJGKbXjdFDAqUEiA2VHqkK1Z.jpg" },
-            { t: "Eternals", p: "/bcCBq9N1EMo3daNIjWJ8kYvrQm6.jpg" },
-
-            // ====== Ciencia ficción ======
-            { t: "The Matrix", p: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" },
-            { t: "The Matrix Resurrections", p: "/8c4a8kE7PizaGQQnditMmI1xbk0.jpg" },
-            { t: "Dune", p: "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" },
-            { t: "Dune Part Two", p: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg" },
-            { t: "Blade Runner 2049", p: "/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg" },
-            { t: "Arrival", p: "/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg" },
-            { t: "Tenet", p: "/k68nPLbIST6NP96JmTxmZijEvMk.jpg" },
-            { t: "Oppenheimer", p: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" },
-            { t: "The Martian", p: "/5aGhaIHGuXevt7QAaO2jVwGgGu3.jpg" },
-            { t: "Gravity", p: "/kZ2nZw8D681aphje8NJi8EfbL1U.jpg" },
-            { t: "Ready Player One", p: "/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg" },
-            { t: "Tron Legacy", p: "/vou76E5dJa5S4j0d9ln1s1U9Wn2.jpg" },
-            { t: "The Fifth Element", p: "/fPtlCO1yQtnoLHOwKtWz7db6RGU.jpg" },
-            { t: "Star Wars The Force Awakens", p: "/wqnLHWxbg0ZtYFHg9pQn4XrU2z4.jpg" },
-            { t: "Star Wars The Last Jedi", p: "/kOVEVeg59E0wsnXmF9nrh6OmWII.jpg" },
-            { t: "Rogue One", p: "/i0yw1mFbB7sNGHCs7EXZPzFkdA1.jpg" },
-            { t: "Star Trek", p: "/hN2YN8c2TbXpZx3vJKrR4TYM7yR.jpg" },
-            { t: "Pacific Rim", p: "/8wo4eN8dWKaKlxhSvBz19uvj8gA.jpg" },
-            { t: "Independence Day", p: "/p0BPQGSPoSa8Ml0MEAdlEOll3u.jpg" },
-            { t: "Prometheus", p: "/m0ObOaJBerZ3Unc74l471ar8Iiy.jpg" },
-
-            // ====== Drama / Clásicos ======
-            { t: "The Shawshank Redemption", p: "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" },
-            { t: "The Godfather", p: "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" },
-            { t: "The Godfather Part II", p: "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg" },
+            // Clásicos y drama
+            { t: "Cadena Perpetua", p: "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" },
+            { t: "El Padrino", p: "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" },
             { t: "Pulp Fiction", p: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg" },
             { t: "Fight Club", p: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
             { t: "Forrest Gump", p: "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg" },
-            { t: "Titanic", p: "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg" },
             { t: "Gladiator", p: "/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg" },
-            { t: "The Green Mile", p: "/velWPhVMQeQKcxggNEU8YmIo52R.jpg" },
-            { t: "Schindler's List", p: "/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" },
-            { t: "Goodfellas", p: "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg" },
-            { t: "The Wolf of Wall Street", p: "/34m2tygAYBGqA9MXKhRDtzYd4YL.jpg" },
-            { t: "Catch Me If You Can", p: "/sdwjQEM869JFwMytTmvr6ggvaUl.jpg" },
-            { t: "The Departed", p: "/nT97ifVT2J1yMQmeq20Qblg61T.jpg" },
+            { t: "Titanic", p: "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg" },
+            { t: "La Lista de Schindler", p: "/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" },
+            { t: "El Lobo de Wall Street", p: "/34m2tygAYBGqA9MXKhRDtzYd4YL.jpg" },
             { t: "Shutter Island", p: "/kve20tXwUZpu4GUX8l6X7Z4jmL6.jpg" },
-            { t: "The Prestige", p: "/bdN3gXuIZYaJP7ftKK2sU0nPtEA.jpg" },
+            { t: "El Prestigio", p: "/bdN3gXuIZYaJP7ftKK2sU0nPtEA.jpg" },
             { t: "Parasite", p: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
             { t: "1917", p: "/iZf0KyrE25z1sage4SYFLCCrMi9.jpg" },
             { t: "La La Land", p: "/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg" },
             { t: "Whiplash", p: "/7fn624j5lj3xTme2SgiLCeuedmO.jpg" },
 
-            // ====== Terror / Suspenso ======
-            { t: "The Conjuring", p: "/wVYREutTvI2tmxr6ujrHT704wGF.jpg" },
-            { t: "The Conjuring 2", p: "/zEqyD0SBt6HL7W9JQoWwtd5Do1T.jpg" },
-            { t: "Insidious", p: "/lXhgAIns4P7Xz3r8N0w3T3YbWv7.jpg" },
-            { t: "Get Out", p: "/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg" },
-            { t: "Us", p: "/ux2dU1jQ2ACIMShzB3yP93Udpzc.jpg" },
-            { t: "A Quiet Place", p: "/nOC7bc2VJGE046tFE7onhKQLqZd.jpg" },
-            { t: "A Quiet Place Part II", p: "/4q2hz2m8hubgvijz8Ez0T2Os2Yv.jpg" },
-            { t: "Hereditary", p: "/p9fmuz2Oj3HtEJEqbIwkFGUhVXD.jpg" },
-            { t: "Midsommar", p: "/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg" },
-            { t: "The Witch", p: "/zap5hpFCWSvdWSuPGAQyjUv2wAC.jpg" },
-            { t: "It", p: "/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg" },
-            { t: "It Chapter Two", p: "/zfE0R94v1E8cuKAerbskfD3VfUt.jpg" },
-            { t: "The Nun", p: "/sFC1ElvoKGdHJIWRpNB3xWJ9lJA.jpg" },
-            { t: "Halloween", p: "/ir9eyz1mtgsohjzojlvLbH8Xj6P.jpg" },
-            { t: "Scream", p: "/1m3W6cpgwuIyjtg5nSnPx7yFkXW.jpg" },
+            // Ciencia ficción
+            { t: "Inception", p: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg" },
+            { t: "The Matrix", p: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" },
+            { t: "Interstellar", p: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
+            { t: "Avatar", p: "/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg" },
+            { t: "Dune", p: "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" },
+            { t: "Dune: Parte 2", p: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg" },
+            { t: "Oppenheimer", p: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" },
+            { t: "Tenet", p: "/k68nPLbIST6NP96JmTxmZijEvMk.jpg" },
+            { t: "The Martian", p: "/5aGhaIHGuXevt7QAaO2jVwGgGu3.jpg" },
+            { t: "Blade Runner 2049", p: "/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg" },
+            { t: "La Llegada", p: "/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg" },
+            { t: "Gravity", p: "/kZ2nZw8D681aphje8NJi8EfbL1U.jpg" },
+            { t: "Ready Player One", p: "/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg" },
 
-            // ====== Animación / Anime ======
-            { t: "Spirited Away", p: "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" },
-            { t: "My Neighbor Totoro", p: "/rtGDOeG9LzoerkDGZF9dnVeLppL.jpg" },
-            { t: "Princess Mononoke", p: "/cMYCDADoLKLbB83gdz6BxPUaIXR.jpg" },
-            { t: "Howl's Moving Castle", p: "/TkTPELv4kC3u1lkloush8skOjE.jpg" },
+            // Superhéroes y acción
+            { t: "The Dark Knight", p: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
+            { t: "Joker", p: "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" },
+            { t: "The Batman", p: "/74xTEgt7R36Fpooo50r9T25onhq.jpg" },
+            { t: "Avengers: Endgame", p: "/or06FN3Dka5tukK1e9sl16pB3iy.jpg" },
+            { t: "Avengers: Infinity War", p: "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg" },
+            { t: "Spider-Man: No Way Home", p: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" },
+            { t: "Spider-Man: Across the Spider-Verse", p: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" },
+            { t: "Spider-Man: Into the Spider-Verse", p: "/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg" },
+            { t: "Black Panther", p: "/uxzzxijgPIY7slzFvMotPv8wjKA.jpg" },
+            { t: "Black Panther: Wakanda Forever", p: "/sv1xJUazXeYqALzczSZ3O6nkH75.jpg" },
+            { t: "Iron Man", p: "/78lPtwv72eTNqFW9COBYI0dWDJa.jpg" },
+            { t: "Thor: Ragnarok", p: "/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg" },
+            { t: "Doctor Strange", p: "/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg" },
+            { t: "Guardians of the Galaxy", p: "/r7vmZjiyZw9rpJMQJdXpjgiCOk9.jpg" },
+            { t: "Guardians of the Galaxy Vol. 3", p: "/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg" },
+            { t: "Capitán América: Civil War", p: "/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg" },
+            { t: "Deadpool", p: "/fSRb7vyIP8rQpL0I47P3qUsEKX3.jpg" },
+            { t: "Logan", p: "/fnbjcRDYn6YviCcePDnGdyAkYsB.jpg" },
+
+            // Animación / Anime
+            { t: "El Viaje de Chihiro", p: "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" },
+            { t: "Mi Vecino Totoro", p: "/rtGDOeG9LzoerkDGZF9dnVeLppL.jpg" },
+            { t: "La Princesa Mononoke", p: "/cMYCDADoLKLbB83gdz6BxPUaIXR.jpg" },
+            { t: "El Castillo Ambulante", p: "/TkTPELv4kC3u1lkloush8skOjE.jpg" },
             { t: "Your Name", p: "/q719jXXEzOoYaps6babgKnONONX.jpg" },
             { t: "Akira", p: "/neZ0ykEsPqxamsXoHnyQV4Re9tl.jpg" },
             { t: "Ghost in the Shell", p: "/9gC88zYUBARRSThcG93MvW14sqx.jpg" },
-            { t: "Spider-Verse", p: "/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg" },
-            { t: "Toy Story", p: "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg" },
-            { t: "Toy Story 3", p: "/AbbXspMOwdvwWZgVN0nabZq03Ec.jpg" },
-            { t: "Toy Story 4", p: "/w9kR8qbmQ01HwnvK4alvnQ2ca0L.jpg" },
-            { t: "Finding Nemo", p: "/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg" },
-            { t: "The Incredibles", p: "/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg" },
             { t: "Coco", p: "/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg" },
             { t: "Up", p: "/vpbaStTMt8qqXaEgnOR2EE4DNJk.jpg" },
-            { t: "WALL-E", p: "/hbhFnRzzg6ZDmm8YAmxBnQpQIPh.jpg" },
+            { t: "WALL·E", p: "/hbhFnRzzg6ZDmm8YAmxBnQpQIPh.jpg" },
             { t: "Ratatouille", p: "/npHNjldbeTHdKKw28bJKs7lzqzj.jpg" },
-            { t: "Inside Out", p: "/aAmfIX3TT40zUHGcCKrlOZRKC7u.jpg" },
-            { t: "Soul", p: "/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg" },
-            { t: "Luca", p: "/jTswp6KyDYKtvC52GbHagrZbGvD.jpg" },
+            { t: "Toy Story", p: "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg" },
+            { t: "Buscando a Nemo", p: "/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg" },
+            { t: "Los Increíbles", p: "/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg" },
 
-            // ====== Fantasía / Aventura ======
-            { t: "The Lord of the Rings Fellowship", p: "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg" },
-            { t: "The Lord of the Rings Two Towers", p: "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg" },
-            { t: "The Lord of the Rings Return of the King", p: "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" },
-            { t: "The Hobbit", p: "/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg" },
-            { t: "Harry Potter Sorcerer's Stone", p: "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg" },
-            { t: "Harry Potter Chamber of Secrets", p: "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg" },
-            { t: "Harry Potter Prisoner of Azkaban", p: "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg" },
-            { t: "Harry Potter Goblet of Fire", p: "/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg" },
-            { t: "Harry Potter Deathly Hallows 2", p: "/c54HpQmuwXjHq2C9wmoACjxoom3.jpg" },
-            { t: "Fantastic Beasts", p: "/fLsaFKExQt05yqjoL6m7W8Ht7d2.jpg" },
-            { t: "Pirates of the Caribbean", p: "/z8onk7LV9Mmw6zKz4hT6pzzvmvl.jpg" },
-            { t: "The Chronicles of Narnia", p: "/iREd0rNCjYdf5Ar0vfaWMCx3Puj.jpg" },
-            { t: "Jumanji Welcome to the Jungle", p: "/pSgXKPU5h6U89ipF7HBYajvYt7j.jpg" },
-            { t: "Free Guy", p: "/xmbU4JTUm8rsdtn7Y3Fcm30GpeT.jpg" },
-            { t: "Minecraft Movie", p: "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg" },
+            // Fantasía y aventura
+            { t: "El Señor de los Anillos: La Comunidad", p: "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg" },
+            { t: "El Señor de los Anillos: Las Dos Torres", p: "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg" },
+            { t: "El Señor de los Anillos: El Retorno del Rey", p: "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" },
+            { t: "El Hobbit", p: "/yHA9Fc37VmpUA5UncTxxo3rTGVA.jpg" },
+            { t: "Harry Potter y la Piedra Filosofal", p: "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg" },
+            { t: "Harry Potter y la Cámara Secreta", p: "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg" },
+            { t: "Harry Potter y el Prisionero de Azkaban", p: "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg" },
+            { t: "Piratas del Caribe", p: "/z8onk7LV9Mmw6zKz4hT6pzzvmvl.jpg" },
 
-            // ====== Comedia ======
-            { t: "The Grand Budapest Hotel", p: "/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg" },
-            { t: "Superbad", p: "/ek8e8txUyUwd2BNqj6lFEerJfbq.jpg" },
-            { t: "The Hangover", p: "/uluhlXubGu1VxU63X9VHCLWDAYP.jpg" },
-            { t: "Anchorman", p: "/2EO5Qr0IVQmnW3jF9yW6JvIYDDW.jpg" },
-            { t: "Step Brothers", p: "/nvz6EMnEjHqoq7FvNMJhSiqKbSw.jpg" },
-            { t: "Borat", p: "/3l4Upp6rMK8YqmHq3gjPWGK4RjS.jpg" },
+            // Terror
+            { t: "The Conjuring", p: "/wVYREutTvI2tmxr6ujrHT704wGF.jpg" },
+            { t: "Get Out", p: "/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg" },
+            { t: "A Quiet Place", p: "/nOC7bc2VJGE046tFE7onhKQLqZd.jpg" },
+            { t: "Hereditary", p: "/p9fmuz2Oj3HtEJEqbIwkFGUhVXD.jpg" },
+            { t: "It", p: "/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg" },
         ];
 
-        // ============================================================
-        // Construye la lista completa de URLs (w300 = tamaño ideal)
-        // ============================================================
-        const POSTERS = MOVIE_POSTERS.map(function (m) {
-            return "https://image.tmdb.org/t/p/w300" + m.p;
-        });
+        const POSTERS = MOVIE_POSTERS.map(m => "https://image.tmdb.org/t/p/w300" + m.p);
 
         // ============================================================
-        // DISTRIBUCIÓN EN 3 FILAS + SCROLL LENTO
-        // Cada fila recorre TODA la lista de pósters de películas.
+        // Construye el marquee: 3 filas, cada una recorre TODOS los
+        // pósters (con offset distinto) y duplica para bucle continuo.
+        // Anima MUY lento: 400s / 500s / 600s por ciclo.
         // ============================================================
         (function buildMarquee() {
             const contenedor = document.getElementById('marqueeContainer');
             if (!contenedor || !POSTERS.length) return;
 
             const filas = [
-                { dir: 'left',  dur: '180s' },
-                { dir: 'right', dur: '220s' },
-                { dir: 'left',  dur: '260s' },
+                { dir: 'left',  dur: '400s', offset: 0 },
+                { dir: 'right', dur: '500s', offset: Math.floor(POSTERS.length / 3) },
+                { dir: 'left',  dur: '600s', offset: Math.floor((POSTERS.length * 2) / 3) },
             ];
 
-            filas.forEach(function (fila, idx) {
+            filas.forEach(function (fila) {
                 const row = document.createElement('div');
                 row.className = (fila.dir === 'left' ? 'marquee-row-left' : 'marquee-row-right') + ' gap-4';
                 row.style.animationDuration = fila.dur;
 
-                // Duplicamos el bloque para bucle sin costuras
+                // Duplicamos para bucle sin costuras
                 for (let copia = 0; copia < 2; copia++) {
                     const bloque = document.createElement('div');
                     bloque.className = 'flex shrink-0 gap-4';
                     if (copia === 1) bloque.setAttribute('aria-hidden', 'true');
 
-                    // Rotamos el orden para que cada fila muestre pelis distintas
-                    const inicio = idx * 13;
-                    const orden = POSTERS.slice(inicio).concat(POSTERS.slice(0, inicio));
+                    // Offset para que cada fila muestre un orden distinto
+                    const orden = POSTERS.slice(fila.offset).concat(POSTERS.slice(0, fila.offset));
 
                     orden.forEach(function (url) {
                         const img = document.createElement('img');
-                        img.src = url;
                         img.loading = 'lazy';
                         img.decoding = 'async';
                         img.className = 'poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44';
                         img.alt = '';
+                        // Ocultar limpiamente si falla (sin texto raro)
                         img.addEventListener('error', function () {
-                            // Fallback: si un póster no carga, mostramos placeholder
-                            if (this.src.indexOf('placehold.co') === -1) {
-                                this.src = 'https://placehold.co/300x450/1e293b/60a5fa?text=Pelicula';
-                            }
+                            this.classList.add('is-error');
                         });
+                        img.src = url;
                         bloque.appendChild(img);
                     });
 
@@ -618,7 +543,7 @@
         })();
 
         // ============================================================
-        // BOTONES: copiar URL y descargar
+        // Botones
         // ============================================================
         function mostrarToast(texto) {
             const toast = document.getElementById('toast');
