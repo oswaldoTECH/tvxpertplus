@@ -2,77 +2,227 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LikeNet - Descargas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Descarga la aplicación LikeNet (APK) desde el servidor oficial.">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="color-scheme" content="light dark">
+    <title>LikeNet · Descargas</title>
 
     <style>
+        /* ---------- Tokens de diseño ---------- */
+        :root {
+            --fondo: #eef2f7;
+            --fondo-degradado: radial-gradient(1200px 600px at 50% -10%, #dbeafe 0%, transparent 60%);
+            --tarjeta: #ffffff;
+            --borde: rgba(15, 23, 42, 0.08);
+            --texto: #1f2937;
+            --texto-suave: #6b7280;
+            --primario: #2563eb;
+            --primario-hover: #1d4ed8;
+            --sombra: 0 10px 30px rgba(15, 23, 42, 0.10);
+            --radio: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --fondo: #0b1120;
+                --fondo-degradado: radial-gradient(1200px 600px at 50% -10%, #1e3a8a55 0%, transparent 60%);
+                --tarjeta: #111827;
+                --borde: rgba(255, 255, 255, 0.08);
+                --texto: #f1f5f9;
+                --texto-suave: #94a3b8;
+                --primario: #3b82f6;
+                --primario-hover: #60a5fa;
+                --sombra: 0 10px 30px rgba(0, 0, 0, 0.45);
+            }
+        }
+
+        /* ---------- Reset básico ---------- */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { -webkit-text-size-adjust: 100%; }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
+            min-height: 100dvh;
+            display: grid;
+            place-items: center;
+            padding: 24px 16px;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--texto);
+            background-color: var(--fondo);
+            background-image: var(--fondo-degradado);
+            background-repeat: no-repeat;
+            transition: background-color .3s ease, color .3s ease;
         }
 
+        /* ---------- Tarjeta ---------- */
         .contenedor {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
+            width: min(100%, 480px);
+            padding: clamp(28px, 6vw, 44px);
             text-align: center;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
-            max-width: 500px;
-            width: 90%;
+            background: var(--tarjeta);
+            border: 1px solid var(--borde);
+            border-radius: var(--radio);
+            box-shadow: var(--sombra);
+            animation: aparecer .45s ease both;
         }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        /* ---------- Encabezado ---------- */
+        .logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            color: #fff;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, .35);
+        }
+
+        .logo svg { width: 32px; height: 32px; }
 
         h1 {
-            margin-bottom: 10px;
-            color: #1f2937;
+            margin: 0 0 8px;
+            font-size: clamp(1.6rem, 5vw, 1.9rem);
+            letter-spacing: -0.02em;
+            color: var(--texto);
         }
 
-        p {
-            color: #6b7280;
-            margin-bottom: 25px;
+        .descripcion {
+            margin: 0 0 26px;
+            font-size: 1rem;
+            color: var(--texto-suave);
         }
 
+        /* ---------- Metadatos del archivo ---------- */
+        .detalles {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0 0 26px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .detalles li {
+            padding: 6px 12px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--texto-suave);
+            background: color-mix(in srgb, var(--texto) 6%, transparent);
+            border-radius: 999px;
+        }
+
+        /* ---------- Botón ---------- */
         .boton {
-            display: inline-block;
-            padding: 14px 28px;
-            background: #2563eb;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            color: #fff;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: 0.2s;
+            background: var(--primario);
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, .30);
+            transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
         }
+
+        .boton svg { width: 20px; height: 20px; flex: none; }
 
         .boton:hover {
-            background: #1d4ed8;
+            background: var(--primario-hover);
             transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, .38);
+        }
+
+        .boton:active { transform: translateY(0); }
+
+        .boton:focus-visible {
+            outline: 3px solid var(--primario);
+            outline-offset: 3px;
+        }
+
+        /* ---------- Nota ---------- */
+        .nota {
+            margin: 20px 0 0;
+            font-size: .82rem;
+            color: var(--texto-suave);
+        }
+
+        .nota strong { color: var(--texto); }
+
+        /* ---------- Movimiento reducido ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="contenedor">
+    <main class="contenedor">
+
+        <div class="logo" aria-hidden="true">
+            <!-- Icono de descarga -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        </div>
 
         <h1>LikeNet</h1>
 
-        <p>
-            Descarga la herramienta o archivo solicitado
-            desde nuestro servidor.
+        <p class="descripcion">
+            Descarga la herramienta o archivo solicitado desde nuestro servidor.
         </p>
 
-        <a
-            class="boton"
-            href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
-            target="_blank">
-            ⬇️ Descargar APK
+        <ul class="detalles">
+            <li>Versión 3.1</li>
+            <li>Formato APK</li>
+            <li>Android</li>
+        </ul>
+
+        <a class="boton"
+           href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
+           target="_blank"
+           rel="noopener noreferrer"
+           download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar APK
         </a>
 
-    </div>
+        <p class="nota">
+            Al instalar, activa <strong>“Orígenes desconocidos”</strong> en los
+            ajustes de seguridad de tu dispositivo.
+        </p>
+
+    </main>
 
 </body>
 </html>
