@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Descarga la aplicación TvXpertPlus (APK) con películas, series y más.">
-    <meta name="theme-color" content="#111827">
-    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#05070f">
+    <meta name="color-scheme" content="dark light">
     <title>TvXpertPlus · Películas, Series y Más</title>
 
     <!-- Tailwind CSS CDN -->
@@ -29,13 +29,50 @@
     </script>
 
     <style>
-        @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        /* Ángulo animable para el borde cónico */
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
         }
 
+        html { scroll-behavior: smooth; }
+
+        /* ================= FONDO AURORA ================= */
+        .blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(90px);
+            opacity: .55;
+            will-change: transform;
+        }
+        @keyframes aurora-1 {
+            0%, 100% { transform: translate3d(-10%, -8%, 0) scale(1); }
+            50%      { transform: translate3d(12%, 10%, 0) scale(1.3); }
+        }
+        @keyframes aurora-2 {
+            0%, 100% { transform: translate3d(8%, 12%, 0) scale(1.15); }
+            50%      { transform: translate3d(-12%, -10%, 0) scale(0.9); }
+        }
+        @keyframes aurora-3 {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50%      { transform: translate3d(-8%, 14%, 0) scale(1.2); }
+        }
+        .blob-1 { animation: aurora-1 18s ease-in-out infinite; }
+        .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
+        .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
+
+        @media (prefers-color-scheme: light) {
+            .blob { opacity: .35; }
+        }
+
+        /* ================= MARQUEE DE PÓSTERS ================= */
+        @keyframes scroll-left {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
         @keyframes scroll-right {
-            0% { transform: translateX(-50%); }
+            0%   { transform: translateX(-50%); }
             100% { transform: translateX(0); }
         }
 
@@ -44,163 +81,335 @@
             width: max-content;
             animation: scroll-left 45s linear infinite;
         }
-
         .marquee-row-right {
             display: flex;
             width: max-content;
-            animation: scroll-right 50s linear infinite;
+            animation: scroll-right 55s linear infinite;
+        }
+        .marquee-row-left:hover,
+        .marquee-row-right:hover { animation-play-state: paused; }
+
+        /* Degradado en los bordes del carrusel */
+        .marquee-mask {
+            -webkit-mask-image:
+                linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+            -webkit-mask-composite: source-in;
+            mask-image:
+                linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+            mask-composite: intersect;
         }
 
-        .marquee-row-left:hover, .marquee-row-right:hover {
-            animation-play-state: paused;
+        .poster {
+            transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
+            filter: saturate(.75) brightness(.85);
+        }
+        .poster:hover {
+            transform: scale(1.07) translateY(-8px);
+            filter: saturate(1.1) brightness(1.05);
+            box-shadow: 0 22px 50px -12px rgba(37, 99, 235, .75);
+            z-index: 5;
         }
 
-        /* Viñeta cinematográfica para centrar el contenido */
+        /* ================= VIÑETA ================= */
         .vignette-overlay {
-            background: radial-gradient(circle at center, rgba(11, 17, 32, 0.72) 0%, rgba(11, 17, 32, 0.94) 85%);
+            background: radial-gradient(circle at 50% 45%,
+                rgba(5, 7, 15, .55) 0%,
+                rgba(5, 7, 15, .86) 55%,
+                rgba(5, 7, 15, .97) 100%);
         }
-        
+
+        /* ================= GRANO ================= */
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+            opacity: .035;
+        }
+
+        /* ================= ENTRADA ESCALONADA ================= */
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(18px) scale(.97); filter: blur(6px); }
+            to   { opacity: 1; transform: translateY(0) scale(1);     filter: blur(0); }
+        }
+        .card-enter > * {
+            animation: aparecer .7s cubic-bezier(.16, 1, .3, 1) backwards;
+        }
+        .card-enter > *:nth-child(1) { animation-delay: .05s; }
+        .card-enter > *:nth-child(2) { animation-delay: .12s; }
+        .card-enter > *:nth-child(3) { animation-delay: .19s; }
+        .card-enter > *:nth-child(4) { animation-delay: .26s; }
+        .card-enter > *:nth-child(5) { animation-delay: .33s; }
+        .card-enter > *:nth-child(6) { animation-delay: .40s; }
+
+        /* ================= BORDE LUMINOSO DE LA TARJETA ================= */
+        @keyframes girar-angulo {
+            to { --angle: 360deg; }
+        }
+        .card-glow {
+            position: absolute;
+            inset: -2px;
+            border-radius: 1.75rem;
+            background: conic-gradient(from var(--angle),
+                #2563eb, #7c3aed, #06b6d4, #2563eb, #7c3aed, #2563eb);
+            filter: blur(14px);
+            opacity: .55;
+            animation: girar-angulo 9s linear infinite;
+            z-index: 0;
+        }
+
+        /* ================= LOGO FLOTANTE ================= */
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-6px); }
+        }
+        .logo-float { animation: flotar 4s ease-in-out infinite; }
+
+        /* ================= TÍTULO DEGRADADO ================= */
+        .titulo-degradado {
+            background: linear-gradient(100deg, #ffffff 0%, #93c5fd 35%, #c4b5fd 55%, #ffffff 90%);
+            background-size: 250% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: brillar 6s ease-in-out infinite;
+        }
         @media (prefers-color-scheme: light) {
-            .vignette-overlay {
-                background: radial-gradient(circle at center, rgba(238, 242, 247, 0.80) 0%, rgba(238, 242, 247, 0.95) 85%);
+            .titulo-degradado {
+                background: linear-gradient(100deg, #0f172a 0%, #2563eb 35%, #7c3aed 55%, #0f172a 90%);
+                background-size: 250% 100%;
+                -webkit-background-clip: text;
+                background-clip: text;
             }
         }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(16px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes brillar {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
         }
 
-        .card-enter {
-            animation: aparecer 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        /* ================= BOTÓN ================= */
+        @keyframes latido {
+            0%, 100% { box-shadow: 0 12px 34px -8px rgba(37, 99, 235, .65); }
+            50%      { box-shadow: 0 12px 44px -4px rgba(59, 130, 246, .95); }
+        }
+        .btn-latido { animation: latido 3.2s ease-in-out infinite; }
+
+        @keyframes destello {
+            0%        { left: -80%; }
+            55%, 100% { left: 130%; }
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -80%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(115deg,
+                transparent 0%,
+                rgba(255, 255, 255, .45) 50%,
+                transparent 100%);
+            transform: skewX(-22deg);
+            animation: destello 4.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* ================= TOAST ================= */
+        .toast {
+            opacity: 0;
+            transform: translate(-50%, 22px) scale(.95);
+            transition: opacity .35s ease, transform .45s cubic-bezier(.16,1,.3,1);
+            pointer-events: none;
+        }
+        .toast.visible {
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+        }
+
+        /* ================= ACCESIBILIDAD ================= */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .001ms !important;
+            }
         }
     </style>
 </head>
-<body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-slate-950 font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
-    <div class="absolute inset-0 flex flex-col justify-between overflow-hidden opacity-40 select-none pointer-events-none py-4 gap-4 z-0">
-        
-        <!-- Fila 1: Izquierda -->
-        <div class="marquee-row-left gap-4">
-            <div class="flex gap-4 shrink-0">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-            </div>
-            <div class="flex gap-4 shrink-0" aria-hidden="true">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-            </div>
-        </div>
+<body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-[#05070f] font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
-        <!-- Fila 2: Derecha -->
-        <div class="marquee-row-right gap-4">
-            <div class="flex gap-4 shrink-0">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-            </div>
-            <div class="flex gap-4 shrink-0" aria-hidden="true">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-            </div>
-        </div>
-
-        <!-- Fila 3: Izquierda -->
-        <div class="marquee-row-left gap-4" style="animation-duration: 55s;">
-            <div class="flex gap-4 shrink-0">
-                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-            </div>
-            <div class="flex gap-4 shrink-0" aria-hidden="true">
-                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="w-36 h-52 sm:w-44 sm:h-64 object-cover rounded-xl shadow-lg" alt="">
-            </div>
-        </div>
-
+    <!-- ================= FONDO: AURORA ================= -->
+    <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <div class="blob blob-1 -top-32 -left-24 h-[30rem] w-[30rem] bg-blue-600/70"></div>
+        <div class="blob blob-2 -bottom-40 -right-20 h-[34rem] w-[34rem] bg-violet-600/60"></div>
+        <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-500/40"></div>
     </div>
 
-    <div class="absolute inset-0 vignette-overlay z-10 pointer-events-none"></div>
+    <!-- ================= FONDO: CARRUSEL DE PÓSTERS ================= -->
+    <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.38] pointer-events-none select-none"
+         aria-hidden="true">
 
-    <main class="relative z-20 min-h-screen min-h-[100dvh] flex items-center justify-center p-4 sm:p-6">
-        <div class="card-enter w-full max-w-[480px] p-8 sm:p-10 text-center bg-white dark:bg-slate-900 border border-slate-200/85 dark:border-slate-800/80 rounded-3xl shadow-2xl backdrop-blur-xl">
-
-            <!-- Logo -->
-            <div class="w-16 h-16 mx-auto mb-5 grid place-items-center rounded-2xl text-white bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30 ring-4 ring-blue-500/10" aria-hidden="true">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
+        <!-- Fila 1 · Izquierda -->
+        <div class="marquee-row-left gap-4">
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+            </div>
+        </div>
 
-            <!-- Título -->
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">
-                TvXpertPlus
-            </h1>
+        <!-- Fila 2 · Derecha -->
+        <div class="marquee-row-right gap-4">
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+            </div>
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+            </div>
+        </div>
 
-            <!-- Subtítulo solicitado -->
-            <p class="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 mb-6">
-                TvXpertPlus, películas, series y más.
-            </p>
+        <!-- Fila 3 · Izquierda (más lenta) -->
+        <div class="marquee-row-left gap-4" style="animation-duration: 60s;">
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+            </div>
+            <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+            </div>
+        </div>
+    </div>
 
-            <!-- Detalles de la versión -->
-            <ul class="flex justify-center flex-wrap gap-2 mb-8 p-0 list-none">
-                <li class="px-3.5 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200/50 dark:border-slate-700/50">Versión 3.1</li>
-                <li class="px-3.5 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200/50 dark:border-slate-700/50">Formato APK</li>
-                <li class="px-3.5 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200/50 dark:border-slate-700/50">Android</li>
-            </ul>
+    <!-- ================= FONDO: VIÑETA + GRANO ================= -->
+    <div class="vignette-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
+    <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true"></div>
 
-            <!-- Botón de Descarga -->
-            <a id="btnDescargar"
-               href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
-               target="_blank"
-               rel="noopener noreferrer"
-               download
-               class="inline-flex items-center justify-center gap-3 w-full py-4 px-6 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.99] rounded-2xl shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/30">
-                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Descargar APK
-            </a>
+    <!-- ================= CONTENIDO ================= -->
+    <main class="relative z-20 flex min-h-screen min-h-[100dvh] items-center justify-center p-4 sm:p-6">
+        <div class="relative w-full max-w-[480px]">
 
-            <!-- Nota de instalación -->
-            <p class="mt-6 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                Al instalar, activa <strong class="text-slate-700 dark:text-slate-200 font-semibold">“Orígenes desconocidos”</strong> en los ajustes de seguridad de tu dispositivo.
-            </p>
+            <!-- Halo cónico giratorio -->
+            <div class="card-glow" aria-hidden="true"></div>
 
+            <!-- Tarjeta -->
+            <div class="card-enter relative overflow-hidden rounded-3xl border border-white/10 bg-white/95 p-8 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.85)] backdrop-blur-2xl sm:p-10 dark:bg-slate-900/80">
+
+                <!-- Brillo superior interno -->
+                <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/25 blur-3xl" aria-hidden="true"></div>
+
+                <!-- Logo -->
+                <div class="logo-float relative mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/40 ring-4 ring-blue-500/15" aria-hidden="true">
+                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </div>
+
+                <!-- Título -->
+                <h1 class="titulo-degradado mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                    TvXpertPlus
+                </h1>
+
+                <!-- Subtítulo -->
+                <p class="mb-6 text-sm font-medium text-slate-600 sm:text-base dark:text-slate-400">
+                    TvXpertPlus, películas, series y más.
+                </p>
+
+                <!-- Etiquetas -->
+                <ul class="mb-8 flex list-none flex-wrap justify-center gap-2 p-0">
+                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                        Versión 3.1
+                    </li>
+                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                        Formato APK
+                    </li>
+                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                        Android
+                    </li>
+                </ul>
+
+                <!-- Botón de descarga -->
+                <a id="btnDescargar"
+                   href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   download
+                   class="btn-latido btn-shine group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-6 py-4 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50 active:translate-y-0 active:scale-[0.985]">
+                    <svg class="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span class="relative z-10">Descargar APK</span>
+                </a>
+
+                <!-- Nota -->
+                <p class="mt-6 text-xs leading-relaxed text-slate-500 sm:text-sm dark:text-slate-400">
+                    Al instalar, activa
+                    <strong class="font-semibold text-slate-700 dark:text-slate-200">“Orígenes desconocidos”</strong>
+                    en los ajustes de seguridad de tu dispositivo.
+                </p>
+            </div>
         </div>
     </main>
+
+    <!-- ================= TOAST ================= -->
+    <div id="toast"
+         role="status"
+         aria-live="polite"
+         class="toast fixed bottom-6 left-1/2 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/90 px-5 py-2.5 text-sm font-semibold text-white shadow-2xl backdrop-blur-xl">
+        <span class="grid h-5 w-5 place-items-center rounded-full bg-emerald-500 text-[11px] text-white">✓</span>
+        Iniciando descarga…
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const boton = document.getElementById('btnDescargar');
+            const toast = document.getElementById('toast');
+            let temporizador;
+
             if (boton) {
-                boton.focus();
+                boton.addEventListener('click', function () {
+                    if (!toast) return;
+                    toast.classList.add('visible');
+                    clearTimeout(temporizador);
+                    temporizador = setTimeout(function () {
+                        toast.classList.remove('visible');
+                    }, 3200);
+                });
             }
         });
     </script>
