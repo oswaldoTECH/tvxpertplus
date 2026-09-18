@@ -181,7 +181,6 @@
     <main class="contenedor">
 
         <div class="logo" aria-hidden="true">
-            <!-- Icono de descarga -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -202,7 +201,9 @@
             <li>Android</li>
         </ul>
 
+        <!-- Añadimos id para poder enfocarlo con JS -->
         <a class="boton"
+           id="btnDescargar"
            href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
            target="_blank"
            rel="noopener noreferrer"
@@ -224,5 +225,17 @@
 
     </main>
 
+    <!-- Script para poner el foco en el botón al cargar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const boton = document.getElementById('btnDescargar');
+            if (boton) {
+                // Enfocar el botón (el navegador hará scroll si es necesario)
+                boton.focus();
+                // Opcional: asegurar que sea visible con scroll suave
+                // boton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
 </body>
 </html>
