@@ -37,13 +37,15 @@
 
         html { scroll-behavior: smooth; }
 
-        /* ================= CURSOR PLAY ================= */
+        /* ============================================================
+           CURSOR DE PLAY AZUL (triángulo limpio, sin círculo)
+           ============================================================ */
         body,
         a,
         button,
         [role="button"],
         #btnDescargar {
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='14' fill='white'/%3E%3Ccircle cx='16' cy='16' r='12' fill='%232563eb'/%3E%3Cpath d='M13 10 L24 16 L13 22 Z' fill='white'/%3E%3C/svg%3E") 16 16, pointer;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M9 5 L27 16 L9 27 Z' fill='%232563eb' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, pointer;
         }
         input, textarea { cursor: text; }
 
@@ -143,7 +145,6 @@
         .card-enter > *:nth-child(5) { animation-delay: .33s; }
         .card-enter > *:nth-child(6) { animation-delay: .40s; }
         .card-enter > *:nth-child(7) { animation-delay: .47s; }
-        .card-enter > *:nth-child(8) { animation-delay: .54s; }
 
         /* ================= BORDE LUMINOSO ================= */
         @keyframes girar-angulo {
@@ -272,16 +273,13 @@
 
         /* ============================================================
            PADDING DE LA TARJETA
-           Reducido ~20% respecto a la versión anterior para que la
-           tarjeta sea más compacta en altura (TV / vista lejana),
-           manteniéndola elegante en PC.
            ============================================================ */
         .card-padding {
-            padding: 1.35rem 1.35rem;  /* 22px vertical / horizontal */
+            padding: 1.35rem 1.35rem;
         }
         @media (min-width: 640px) {
             .card-padding {
-                padding: 1.75rem 1.6rem;  /* 28px vertical / 26px horizontal */
+                padding: 1.75rem 1.6rem;
             }
         }
 
@@ -294,7 +292,6 @@
             container-name: tarjeta;
         }
 
-        /* Cuando la tarjeta es pequeña (TV), reducimos aún más */
         @container tarjeta (max-width: 420px) {
             .card-padding { padding: 1.15rem 1.15rem; }
             .titulo-card  { font-size: 1.5rem; }
@@ -306,9 +303,6 @@
             .btn-download { font-size: 0.9rem; padding: 0.75rem 0.9rem; gap: 0.45rem; }
             .btn-download svg { width: 1rem; height: 1rem; }
             .nota-card    { font-size: 0.7rem; margin-top: 0.85rem; }
-            .backup-box   { margin-top: 0.7rem; padding: 0.5rem 0.65rem; }
-            .backup-box p { font-size: 10px; }
-            .backup-box .backup-title { font-size: 9px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -332,64 +326,67 @@
         <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
     </div>
 
-    <!-- ================= FONDO: CARRUSEL ================= -->
+    <!-- ================= FONDO: CARRUSEL DE PÓSTERS (películas de moda) ================= -->
     <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
          aria-hidden="true">
 
+        <!-- Fila 1 · Izquierda -->
         <div class="marquee-row-left gap-4">
             <div class="flex shrink-0 gap-4">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de ciencia ficción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de superhéroes" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de acción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de fantasía" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de drama" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de terror" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
             <div class="flex shrink-0 gap-4">
+                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
                 <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
                 <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
         </div>
 
+        <!-- Fila 2 · Derecha -->
         <div class="marquee-row-right gap-4">
             <div class="flex shrink-0 gap-4">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster serie" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de ciencia ficción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de superhéroes" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de fantasía" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de acción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película de terror" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster película dramática" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
             <div class="flex shrink-0 gap-4">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
                 <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
         </div>
 
+        <!-- Fila 3 · Izquierda -->
         <div class="marquee-row-left gap-4" style="animation-duration: 60s;">
             <div class="flex shrink-0 gap-4">
-                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster de anime" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster colorido" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster de terror" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster de acción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster de ciencia ficción" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="Poster de drama" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
             <div class="flex shrink-0 gap-4">
-                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
                 <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
                 <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
-                <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
+                <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" class="poster pointer-events-auto h-52 w-36 rounded-xl object-cover shadow-2xl sm:h-64 sm:w-44" alt="" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=TvXpertPlus'">
             </div>
         </div>
     </div>
@@ -458,16 +455,6 @@
                     <span class="relative z-10">Descargar APK</span>
                 </a>
 
-                <!-- Respaldo para Downloader -->
-                <div class="backup-box mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-left sm:mt-4 sm:px-3.5 sm:py-2.5">
-                    <p class="backup-title mb-1 text-[10px] font-semibold uppercase tracking-wider text-amber-300 sm:text-[11px]">
-                        ¿Usas Downloader? Copia esta URL
-                    </p>
-                    <p id="urlDescarga" class="select-all break-all font-mono text-[10px] leading-snug text-slate-200 sm:text-[11px]">
-                        https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk
-                    </p>
-                </div>
-
                 <!-- Nota -->
                 <p class="nota-card mt-3 text-[11px] leading-relaxed text-slate-400 sm:mt-4 sm:text-xs">
                     Al instalar, activa
@@ -503,19 +490,6 @@
                     temporizador = setTimeout(function () {
                         toast.classList.remove('visible');
                     }, 3000);
-                });
-            }
-
-            const urlTexto = document.getElementById('urlDescarga');
-            if (urlTexto) {
-                urlTexto.addEventListener('click', function () {
-                    try {
-                        const rango = document.createRange();
-                        rango.selectNodeContents(urlTexto);
-                        const seleccion = window.getSelection();
-                        seleccion.removeAllRanges();
-                        seleccion.addRange(rango);
-                    } catch(e) {}
                 });
             }
         });
