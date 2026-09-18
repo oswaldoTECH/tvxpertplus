@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Descarga la aplicación TvXpertPlus (APK) con películas, series y más.">
-    <meta name="theme-color" content="#05070f">
+    <meta name="theme-color" content="#0f172a">
     <meta name="color-scheme" content="dark light">
     <title>TvXpertPlus · Películas, Series y Más</title>
 
@@ -42,8 +42,8 @@
         .blob {
             position: absolute;
             border-radius: 9999px;
-            filter: blur(90px);
-            opacity: .55;
+            filter: blur(100px);
+            opacity: .7; /* Más brillante */
             will-change: transform;
         }
         @keyframes aurora-1 {
@@ -61,10 +61,6 @@
         .blob-1 { animation: aurora-1 18s ease-in-out infinite; }
         .blob-2 { animation: aurora-2 22s ease-in-out infinite; }
         .blob-3 { animation: aurora-3 26s ease-in-out infinite; }
-
-        @media (prefers-color-scheme: light) {
-            .blob { opacity: .35; }
-        }
 
         /* ================= MARQUEE DE PÓSTERS ================= */
         @keyframes scroll-left {
@@ -89,41 +85,42 @@
         .marquee-row-left:hover,
         .marquee-row-right:hover { animation-play-state: paused; }
 
-        /* Degradado en los bordes del carrusel */
+        /* Degradado en los bordes del carrusel: más suave y con menos recorte */
         .marquee-mask {
             -webkit-mask-image:
-                linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
-                linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+                linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
             -webkit-mask-composite: source-in;
             mask-image:
-                linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%),
-                linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+                linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
             mask-composite: intersect;
         }
 
         .poster {
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
-            filter: saturate(.75) brightness(.85);
+            filter: saturate(1) brightness(0.95); /* Más vivo y claro */
         }
         .poster:hover {
             transform: scale(1.07) translateY(-8px);
-            filter: saturate(1.1) brightness(1.05);
-            box-shadow: 0 22px 50px -12px rgba(37, 99, 235, .75);
+            filter: saturate(1.2) brightness(1.1);
+            box-shadow: 0 22px 50px -12px rgba(59, 130, 246, .9);
             z-index: 5;
         }
 
-        /* ================= VIÑETA ================= */
-        .vignette-overlay {
+        /* ================= OVERLAY LIGERO ================= */
+        /* Ya no es una viñeta oscura, sino un degradado sutil que solo oscurece los bordes */
+        .edge-overlay {
             background: radial-gradient(circle at 50% 45%,
-                rgba(5, 7, 15, .55) 0%,
-                rgba(5, 7, 15, .86) 55%,
-                rgba(5, 7, 15, .97) 100%);
+                transparent 0%,
+                rgba(15, 23, 42, 0.1) 60%,
+                rgba(15, 23, 42, 0.4) 100%);
         }
 
         /* ================= GRANO ================= */
         .noise {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-            opacity: .035;
+            opacity: .025; /* Muy sutil */
         }
 
         /* ================= ENTRADA ESCALONADA ================= */
@@ -150,9 +147,9 @@
             inset: -2px;
             border-radius: 1.75rem;
             background: conic-gradient(from var(--angle),
-                #2563eb, #7c3aed, #06b6d4, #2563eb, #7c3aed, #2563eb);
-            filter: blur(14px);
-            opacity: .55;
+                #3b82f6, #8b5cf6, #06b6d4, #3b82f6, #8b5cf6, #3b82f6);
+            filter: blur(16px);
+            opacity: .6; /* Un poco más brillante */
             animation: girar-angulo 9s linear infinite;
             z-index: 0;
         }
@@ -188,8 +185,8 @@
 
         /* ================= BOTÓN ================= */
         @keyframes latido {
-            0%, 100% { box-shadow: 0 12px 34px -8px rgba(37, 99, 235, .65); }
-            50%      { box-shadow: 0 12px 44px -4px rgba(59, 130, 246, .95); }
+            0%, 100% { box-shadow: 0 12px 34px -8px rgba(37, 99, 235, .7); }
+            50%      { box-shadow: 0 12px 44px -4px rgba(59, 130, 246, 1); }
         }
         .btn-latido { animation: latido 3.2s ease-in-out infinite; }
 
@@ -206,7 +203,7 @@
             height: 100%;
             background: linear-gradient(115deg,
                 transparent 0%,
-                rgba(255, 255, 255, .45) 50%,
+                rgba(255, 255, 255, .5) 50%,
                 transparent 100%);
             transform: skewX(-22deg);
             animation: destello 4.5s ease-in-out infinite;
@@ -238,17 +235,18 @@
     </style>
 </head>
 
-<body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-[#05070f] font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
+<body class="relative min-h-screen min-h-[100dvh] overflow-hidden bg-slate-900 font-sans text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
     <!-- ================= FONDO: AURORA ================= -->
     <div class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <div class="blob blob-1 -top-32 -left-24 h-[30rem] w-[30rem] bg-blue-600/70"></div>
-        <div class="blob blob-2 -bottom-40 -right-20 h-[34rem] w-[34rem] bg-violet-600/60"></div>
-        <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-500/40"></div>
+        <div class="blob blob-1 -top-32 -left-24 h-[30rem] w-[30rem] bg-blue-500/80"></div>
+        <div class="blob blob-2 -bottom-40 -right-20 h-[34rem] w-[34rem] bg-violet-500/70"></div>
+        <div class="blob blob-3 top-1/3 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 bg-cyan-400/50"></div>
     </div>
 
     <!-- ================= FONDO: CARRUSEL DE PÓSTERS ================= -->
-    <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.38] pointer-events-none select-none"
+    <!-- Aumentamos la opacidad para que se aprecien bien -->
+    <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
          aria-hidden="true">
 
         <!-- Fila 1 · Izquierda -->
@@ -312,8 +310,8 @@
         </div>
     </div>
 
-    <!-- ================= FONDO: VIÑETA + GRANO ================= -->
-    <div class="vignette-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
+    <!-- ================= OVERLAY SUTIL ================= -->
+    <div class="edge-overlay absolute inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
     <div class="noise absolute inset-0 z-10 pointer-events-none mix-blend-overlay" aria-hidden="true"></div>
 
     <!-- ================= CONTENIDO ================= -->
@@ -323,14 +321,14 @@
             <!-- Halo cónico giratorio -->
             <div class="card-glow" aria-hidden="true"></div>
 
-            <!-- Tarjeta -->
-            <div class="card-enter relative overflow-hidden rounded-3xl border border-white/10 bg-white/95 p-8 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.85)] backdrop-blur-2xl sm:p-10 dark:bg-slate-900/80">
+            <!-- Tarjeta: más translúcida para integrarse con el fondo -->
+            <div class="card-enter relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 p-8 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl sm:p-10">
 
                 <!-- Brillo superior interno -->
-                <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/25 blur-3xl" aria-hidden="true"></div>
+                <div class="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/30 blur-3xl" aria-hidden="true"></div>
 
                 <!-- Logo -->
-                <div class="logo-float relative mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/40 ring-4 ring-blue-500/15" aria-hidden="true">
+                <div class="logo-float relative mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/50 ring-4 ring-blue-500/20" aria-hidden="true">
                     <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
@@ -344,19 +342,19 @@
                 </h1>
 
                 <!-- Subtítulo -->
-                <p class="mb-6 text-sm font-medium text-slate-600 sm:text-base dark:text-slate-400">
+                <p class="mb-6 text-sm font-medium text-slate-300 sm:text-base">
                     TvXpertPlus, películas, series y más.
                 </p>
 
                 <!-- Etiquetas -->
                 <ul class="mb-8 flex list-none flex-wrap justify-center gap-2 p-0">
-                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
                         Versión 3.1
                     </li>
-                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
                         Formato APK
                     </li>
-                    <li class="rounded-full border border-slate-200/60 bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600 transition-colors hover:border-blue-400/50 hover:text-blue-600 dark:border-slate-700/60 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-blue-400">
+                    <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1 text-xs font-semibold text-slate-200 backdrop-blur-sm transition-colors hover:border-blue-400/50 hover:text-blue-300">
                         Android
                     </li>
                 </ul>
@@ -377,9 +375,9 @@
                 </a>
 
                 <!-- Nota -->
-                <p class="mt-6 text-xs leading-relaxed text-slate-500 sm:text-sm dark:text-slate-400">
+                <p class="mt-6 text-xs leading-relaxed text-slate-400 sm:text-sm">
                     Al instalar, activa
-                    <strong class="font-semibold text-slate-700 dark:text-slate-200">“Orígenes desconocidos”</strong>
+                    <strong class="font-semibold text-slate-200">“Orígenes desconocidos”</strong>
                     en los ajustes de seguridad de tu dispositivo.
                 </p>
             </div>
