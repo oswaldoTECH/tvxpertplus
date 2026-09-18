@@ -43,7 +43,7 @@
             position: absolute;
             border-radius: 9999px;
             filter: blur(100px);
-            opacity: .7; /* Más brillante */
+            opacity: .7;
             will-change: transform;
         }
         @keyframes aurora-1 {
@@ -85,7 +85,6 @@
         .marquee-row-left:hover,
         .marquee-row-right:hover { animation-play-state: paused; }
 
-        /* Degradado en los bordes del carrusel: más suave y con menos recorte */
         .marquee-mask {
             -webkit-mask-image:
                 linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%),
@@ -99,7 +98,7 @@
 
         .poster {
             transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, filter .45s ease;
-            filter: saturate(1) brightness(0.95); /* Más vivo y claro */
+            filter: saturate(1) brightness(0.95);
         }
         .poster:hover {
             transform: scale(1.07) translateY(-8px);
@@ -109,7 +108,6 @@
         }
 
         /* ================= OVERLAY LIGERO ================= */
-        /* Ya no es una viñeta oscura, sino un degradado sutil que solo oscurece los bordes */
         .edge-overlay {
             background: radial-gradient(circle at 50% 45%,
                 transparent 0%,
@@ -120,7 +118,7 @@
         /* ================= GRANO ================= */
         .noise {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-            opacity: .025; /* Muy sutil */
+            opacity: .025;
         }
 
         /* ================= ENTRADA ESCALONADA ================= */
@@ -149,7 +147,7 @@
             background: conic-gradient(from var(--angle),
                 #3b82f6, #8b5cf6, #06b6d4, #3b82f6, #8b5cf6, #3b82f6);
             filter: blur(16px);
-            opacity: .6; /* Un poco más brillante */
+            opacity: .6;
             animation: girar-angulo 9s linear infinite;
             z-index: 0;
         }
@@ -245,7 +243,6 @@
     </div>
 
     <!-- ================= FONDO: CARRUSEL DE PÓSTERS ================= -->
-    <!-- Aumentamos la opacidad para que se aprecien bien -->
     <div class="marquee-mask absolute inset-0 z-0 flex flex-col justify-between gap-5 overflow-hidden py-6 opacity-[0.55] pointer-events-none select-none"
          aria-hidden="true">
 
@@ -321,7 +318,7 @@
             <!-- Halo cónico giratorio -->
             <div class="card-glow" aria-hidden="true"></div>
 
-            <!-- Tarjeta: más translúcida para integrarse con el fondo -->
+            <!-- Tarjeta -->
             <div class="card-enter relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/75 p-8 text-center shadow-[0_35px_90px_-20px_rgba(0,0,0,.9)] backdrop-blur-2xl sm:p-10">
 
                 <!-- Brillo superior interno -->
@@ -359,13 +356,12 @@
                     </li>
                 </ul>
 
-                <!-- Botón de descarga -->
+                <!-- Botón de descarga directa -->
                 <a id="btnDescargar"
                    href="https://github.com/oswaldoTECH/tvxpertplus/releases/download/v1.0.0/Tv.Xpert.plus.3.1.apk"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   download
-                   class="btn-latido btn-shine group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-6 py-4 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50 active:translate-y-0 active:scale-[0.985]">
+                   download="TvXpertPlus-3.1.apk"
+                   rel="noopener"
+                   class="btn-latido btn-shine group relative inline-flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 px-6 py-4 text-base font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-500 hover:via-blue-500 hover:to-indigo-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400/50 active:translate-y-0 active:scale-[0.985]">
                     <svg class="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
@@ -400,14 +396,34 @@
             let temporizador;
 
             if (boton) {
-                boton.addEventListener('click', function () {
-                    if (!toast) return;
-                    toast.classList.add('visible');
-                    clearTimeout(temporizador);
-                    temporizador = setTimeout(function () {
-                        toast.classList.remove('visible');
-                    }, 3200);
+                boton.addEventListener('click', function (e) {
+                    // Mostrar toast sin bloquear la descarga
+                    if (toast) {
+                        toast.classList.add('visible');
+                        clearTimeout(temporizador);
+                        temporizador = setTimeout(function () {
+                            toast.classList.remove('visible');
+                        }, 3200);
+                    }
+
+                    // Forzar descarga directa incluso en navegadores que intentan abrir el archivo
+                    e.preventDefault();
+                    const url = boton.getAttribute('href');
+                    const nombre = boton.getAttribute('download') || 'TvXpertPlus.apk';
+
+                    // Crear un enlace temporal con el atributo download y hacer clic
+                    const enlace = document.createElement('a');
+                    enlace.href = url;
+                    enlace.download = nombre;
+                    enlace.rel = 'noopener';
+                    enlace.style.display = 'none';
+                    document.body.appendChild(enlace);
+                    enlace.click();
+                    document.body.removeChild(enlace);
                 });
+
+                // Enfoque inicial para navegación por control remoto (Smart TV)
+                boton.focus();
             }
         });
     </script>
