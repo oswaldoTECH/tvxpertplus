@@ -1,0 +1,81 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LikeNet - Descargas</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .contenedor {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        p {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 14px 28px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .boton:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>LikeNet</h1>
+
+        <p>
+            Descarga la herramienta o archivo solicitado
+            desde nuestro servidor.
+        </p>
+
+        <a
+            class="boton"
+            href="AQUI_VA_EL_ENLACE_DE_GITHUB"
+            target="_blank"
+            download>
+            ⬇️ Descargar archivo
+        </a>
+
+    </div>
+
+</body>
+</html>
+```
